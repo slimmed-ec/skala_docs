@@ -101,8 +101,8 @@ SKALA AI is licensed under the [MIT License](LICENSE). Feel free to use, modify,
 
 For questions or support, please reach out to:
 
-- Email: support@skala.ai
-- GitHub Issues: [Open an Issue](https://github.com/your-repo/skala-ai/issues)
+- Email: support@skala.xyz
+- GitHub Issues: [Open an Issue](https://github.com/ecavengersproduct/skala_docs/issues)
 
 ---
 
