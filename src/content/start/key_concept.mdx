@@ -1,0 +1,39 @@
+# Key Concepts & Definitions
+
+To get high quality ground truth data with Skala, your first step is to create a [Project](#project) . Within a project, you will upload data and create [tasks](#task) , which are pieces of data to be labeled. The tasks can be grouped within different batches to be launched for labeling. Every task will follow the same taxonomy defined at the project level.
+
+Once your data is hosted in a way that Skala can access it, you can use our UI or submit an API call to create tasks. After you have launched a batch of tasks for labeling, the statuses of your tasks will be “pending.”
+
+Skala Pro customers should expect to receive these tasks back according to the delivery schedule that we have aligned on with you. We can support extremely high and dynamic volumes customized to your needs.
+
+Once a task has been labeled, you'll see the task status move to be “completed.” The task will now have a JSON response associated with it that you can download via our platform.
+
+Inside the web application, you can download a given task's response, or do a bulk export over a filterable range of tasks. We have APIs to support the programmatic retrieval of tasks given a task ID, or to list all tasks meeting customizable filter criteria. Lastly, we fully support callbacks as tasks are moved to a completed or error status or have other actions taken on them, allowing fully programmatic access to your labeled data.
+
+## Task
+
+A task represents an individual unit of work to be done. There's a one-to-one mapping between a task and the data to be labeled. For example, there is one task for each image, video, or piece of text to be labeled and each task will have a unique Skala-generated ID. To create a task using our API, please refer to our API reference .
+
+## Project
+
+Within a given project, you can organize similar tasks based on instructions and the use case. All tasks will share the same instructions and annotation rules.
+
+A project is tied to one specific annotation use case, which is associated with a task type in our API reference. You can have multiple projects per use case.
+
+As an example, you could have one project for categorizing scenes, and another for annotating images.
+
+Every task is tied to an explicit project to keep things organized. To create a project using our API, please refer to our API reference.
+
+## Batch
+
+On Skala Pro: For high-volume projects, batches can optionally be used to further divide work inside a project. For example, batches can tie tasks to specific datasets you use internally, or can be used to note which tasks were part of a weekly submission.
+
+To create and launch a batch, you can refer to our API reference.
+
+## Taxonomy
+
+A taxonomy is a collection of labels and information associated with those labels, which is defined at the project level. We refer to each label as an annotation. Available annotations include box, polygon, point, ellipse, cuboid, event, text response, list selection, tree selection, date, linear scale, and ranking. Within a taxonomy, there can be classes of annotations (i.e. different types of an annotation), global attributes (i.e. information about the whole task) and annotation attributes (i.e. information associated with a specific annotation). We can also create link attributes (i.e. relationships between two annotations).
+
+Example: One use case may involve drawing boxes around all cats and dogs in an image and indicating the total number of cats and dogs in the image. For each cat, we want to indicate if they are sleeping or not sleeping. For each dog, we want to indicate which cat they are looking at (if applicable).
+
+We would create a taxonomy with two classes of box annotations (one for cat and one for dog). Within the cat class, we would define an annotation attribute of “sleeping or not sleeping” so that we can associate each box drawn around a cat with whether or not the cat is sleeping. Within the dog class, we would define a link attribute such that we can relate a dog box with a cat box and indicate a “looking at” relationship. Finally, we would create a global attribute that asks the labeler to indicate the total number of cats and dogs in the image.
