@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { Metadata } from "next";
-import { Database, Dock, ImageDown, Newspaper } from "lucide-react";
+import {
+  Database,
+  // Dock, ImageDown, Newspaper
+} from "lucide-react";
 import Hr from "@/components/ui/hr";
 
 export const metadata: Metadata = {
