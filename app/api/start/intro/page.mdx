@@ -1,0 +1,23 @@
+# API Reference
+
+The Scale API is designed around the principles of REST. It uses resource-oriented URLs for predictable interactions, processes form-encoded request bodies, delivers JSON-encoded responses, and employs standard HTTP response codes, authentication protocols, and verbs.
+
+The Scale API provides a sandbox mode, allowing you to test your integrations without affecting your live data or interacting with production systems. The API key used during request authentication determines whether the interaction occurs in live mode or sandbox mode.
+
+Please note, the Scale API does not support bulk updates. Each request is tailored to work on a single object.
+
+#### Python
+
+```bash filename="BASH"
+pip install --upgrade scaleapi
+
+conda install -c conda-forge scaleapi # If using Anaconda package management
+```
+
+#### Javascript
+
+```bash filename="BASH"
+$ npm install scaleapi --save
+```
+
+**Don't see your favorite language?** Let us know if you want (or are interested in writing) a library for a language not represented here!

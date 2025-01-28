@@ -1,0 +1,64 @@
+# Authentication
+
+Scale uses "HTTP Basic Auth" to authenticate API calls. Scale expects for the API key to be included in all API requests to our platform. "HTTP Basic Auth" supports a username and password. Provide your API key as the basic auth username value. There is not a password, you should leave that blank.
+
+```python filename="Python"
+
+import requests
+
+from requests.auth import HTTPBasicAuth
+
+url = "https://api.skala.xyz/v1/tasks"
+
+headers = {"Accept": "application/json"}
+
+auth = HTTPBasicAuth('{{ApiKey}}', '') # No password
+
+response = requests.request("GET", url, headers=headers, auth=auth)
+
+print(response.text)
+
+```
+
+### Getting your API key
+
+Your API keys are conveniently located in your dashboard. Access to your dashboard is gained by either logging in into your existing account or creating a new one signing up. Once you're in, navigate to your profile and select 'API Key' from the drop-down menu.
+
+Don't see the "API Keys" section?.
+Have your account admin head over to https://dashboard.skala.xyz/settings/team and update your role to be a "Manager" - Only Admins and Managers have access to API Keys for your security.
+
+### Test and Live Modes
+
+To make the API as explorable as possible, accounts have test mode and live mode API keys. There is no "switch" for changing between modes, just use the appropriate key to perform a live or test API requests.
+
+Requests made with test mode credentials are not completed by a human, and therefore have incorrect test responses. Requests made with live mode credentials are always completed by a human and will incur a charge.
+
+### Environments are Separate
+
+The live and test modes of Scale are truly self-contained and separate. If you have created a Project in the live mode, and try to reference it when creating a task in testing mode, you will get an error.
+
+The Scale AI web application has a toggle to switch between viewing the live and test modes below the project list on the left-hand side.
+
+### Callback Authentication
+
+If you'd like to authenticate our callbacks, we set a scale-callback-auth HTTP header on each of our callbacks. The value will be equal to your Live Callback Auth Key shown on your dashboard. If this header is not set, or it is set incorrectly, the callback is not from Scale.
+
+### How does Basic Auth work?
+
+The end goal of our authentication is to be able to specify an `Authorization` header on the requests we're making to the Scale platform.
+
+Let's pretend our Scale API Key is live_ScaleRocks.
+
+Basic Auth puts the username and password together separated by a colon so that it looks like this username:password. Because Scale doesn't have a password, the value is going to be simply username: (with the trailing colon)
+
+In our example, this value would now be live_ScaleRocks:
+
+We then need to do a Base64 encoding for this new string. Virtually all programming languages come with a helper function that can convert a string into it's Base64 encoded version.
+
+In our example, our encoded string would now look like bGl2ZV9TY2FsZVJvY2tzOg==
+
+The authorization header when using basic auth starts with Basic , and then the encoded string.
+
+Following the example, the Authorization header on our request would be Basic bGl2ZV9TY2FsZVJvY2tzOg==
+
+If you look at a request header in Postman or in our docs, you'll see the encoded version of your API key being set directly in the header.

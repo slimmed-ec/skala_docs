@@ -1,0 +1,141 @@
+import { Table } from "nextra/components";
+
+# Project Overview
+
+Projects are a way of organizing similar tasks, so that one can share parameters among tasks, or control what workers are allowed to work on certain classes of tasks. The parameters associated with a project will be inherited by tasks created under that project. See Update Parameters (Project) for more information. A common use-case is to define and update instructions at the project level and let tasks inherit from the current version of the project instructions. To use a project for a given task, add a project parameter when creating the task that references the project name; e.g., to associate a task with project my_project, add project: my_project to the task creation request. Note that projects created using your test API key can only be used for creating test tasks; likewise with the live API key and live tasks.
+
+### Using Project-level parameters
+
+Scale uses Projects to organize Tasks, the unit of work. Each type of Task (Image Annotation, Text Collection, Lidar Annotation) has many customizable input parameters that can be used when creating tasks to guide exactly how the tasks are formed and what the response will look like. Task definitions can be stored on the Task level, the Project level, or a hybrid approach.
+
+### Task vs. Project Level Parameters
+
+#### Task Only
+
+All Task parameters (definitions) are set when making the API call to create a Task. The Project has no parameters and is instead simply used just to collect and organize similar sets of tasks. The Task-specific endpoints and parameters documented in our docs would result in a "Task Only" approach.
+
+#### Project Only
+
+In a Project only approach, all task definitions are stored in a versioned set of project parameters. When creating a task, you only need to specify the attachment and other per-task fields, and the task will inherit all the parameters and task definitions from the project version.
+
+#### Hybrid Approach
+
+In the Hybrid approach, some task-level parameters are specified on the Project level, while others are defined on a per-task basis. This could be useful to take advantage of the project versioning while allowing flexibility for certain parameters that could change on a per-task basis.
+
+### Project-level Parameter Features
+
+#### Versioning
+
+Scale maintains a queryable list of all past project versions. You can quickly see what was in a given project version of the past. All Tasks will have a project_param_version field pointing to which version of the project parameters were used in that task. When creating tasks, you can specify which version of project parameters should be used.
+
+#### Separation of Concerns
+
+As you get more sophisticated, it's recommended to separate the taxonomy management from the task submission pipeline. The task submission should be fairly "dumb" in that it doesn't need to know all of the details about how a task should be labeled, it just knows that it needs to add a new attachment to a project for labeling - and that the project will dictate how this task will be labeled.
+
+The project params can then be updated independently of the task submission process.
+
+#### Default Values
+
+Project-level Parameters are automatically passed down and combined with the task parameters when creating tasks within that project. In this way, you can set default values that you want to ensure are specified regardless of how tasks are submitted to the project. A common use-case might be the instructions - but you can specify any default you'd like.
+
+### How do I start using Project-level Parameters?
+
+At the Project Level:
+
+- We will be leveraging the Update Parameters endpoint to set and create project parameter versions.
+- When Retrieving or Listing projects, information about the project parameters will be available in the paramHistory field.
+
+At the Task Level:
+
+- Tasks will automatically use the latest version of project parameters. The parameters specified at the project level are automatically merged in with the task-level parameters. Parameters specified at the task level do override any default parameters that would be inherited by the project, with the exception of the instruction field, which works by concatenating the task level and project level instructions together.
+- You are able to specify previous versions of the project to use when creating tasks by specifying a project_param_version.
+
+**Examples**
+
+Check out some of our code examples of using this workflow to find out what it all looks like.
+
+---
+
+# Using Project Ontologies
+
+Scale uses Ontologies to maintain complex taxonomies and provide detailed labeling guidance to labelers. We provide a tool to allow both you and the labelers to view how the ontology has changed over time and gain insights on each choice. Ontologies can be used as a replacement or add-on to the instructions of the project.
+
+### Ontology Features
+
+#### Versioning
+
+Scale maintains a queryable list of all past ontology versions. You can quickly see the previous ontology versions of the past and how they've changed over time.
+
+#### Descriptions
+
+To provide more context on label choices, you can provide descriptions on each choice within your ontology.
+
+### How do I start using Ontologies?
+
+At the Project Level:
+
+- We will be leveraging the Update Ontology endpoint to set and create project ontology versions.
+
+- When Retrieving or Listing projects, information about the project ontologies will be available in the ontologyHistory field.
+
+At the Task Level:
+
+- Tasks will automatically use the latest version of project ontology when providing guidance to labelers. The ontology is currently not related to the project params and its object choices by default.
+
+<Table>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Parameter</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Description</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>choice*</Table.Td>
+      <Table.Td>string</Table.Td>
+      <Table.Td>The name of the choice.</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>display</Table.Td>
+      <Table.Td>string</Table.Td>
+      <Table.Td>The displayed name of the choice.</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>description</Table.Td>
+      <Table.Td>string</Table.Td>
+      <Table.Td>
+        The description of the choice and any labeling guidance which can be
+        provided.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>subchoices</Table.Td>
+      <Table.Td>Array&lt;OntologyChoice | string&gt;</Table.Td>
+      <Table.Td>
+        Sub-choices to be shown under this parent label. Array can be a mix of
+        <code>OntologyChoice</code> objects or strings.
+      </Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+```json filename="ontology.json"
+
+ontology = [
+  "Road",
+  {
+    "choice": "Vehicle",
+    "description": "a means of carrying or transporting material",
+    "subchoices": ["Car", "Truck", "Train", "Motorcycle"]
+  },
+  {
+    "choice": "Pedestrian",
+    "subchoices": [
+      "Animal",
+      {"choice": "Ped_HeightOverMeter", "display": "Adult" },
+      {"choice": "Ped_HeightUnderMeter", "display": "Child" },
+    ]
+  }
+]
+```

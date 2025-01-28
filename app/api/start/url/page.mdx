@@ -1,0 +1,11 @@
+# Secure Result URLs
+
+For tasks like 2d segmentation, video, and lidar where results cannot simply be put in the task JSON, task responses are uploaded to an AWS S3 bucket scaleapi-results, publicly accessible with a URL in the form https://scaleapi-results.s3.us-west-1.amazonaws.com/:uuid. This is generally secure enough for our customers, as the UUIDs are unlikely to be guessed and cannot be linked back to a user or the data that the annotations correspond to.
+
+We do have the ability to, rather than return publicly accessible URLs, instead, return URLs that require authentication for each request. This ensures that third parties without access to your Scale account will not be able to download your task responses, even if they manage to get a hold of or guess the URL.
+
+#### Secure result URLs will be of the form
+
+https://api.skala.xyz/v1/task/:taskId/response_url/:uuid, and in order to be fetched HTTP basic auth (with your account's live API key) must be used.
+
+Please contact Scale Support to enable secure result URLs for your account.

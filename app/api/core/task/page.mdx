@@ -1,0 +1,202 @@
+import { Table } from "nextra/components";
+
+# Tasks Object Overview
+
+A task represents an individual unit of work to be done by a Tasker. There's a 1:1 mapping between a task and the data to be labeled. For example, there'd be 1 task for each image, video, or lidar sequence needing to be labeled.
+
+You specify how the labeling should be done for a given task when making an API call specifying a set of task parameters to the endpoint you'd like to leverage.
+
+Tasks have a type such as "Image Annotation", "Video Annotation", "Lidar Segmentation", or "Document Transcription".
+
+Learn more about our key concepts and workflows in our "Schttps://scale.com/docs/key-conceptsale 101" guides.
+
+```json filename="task.json"
+{
+  "task_id": "576ba74eec471ff9b01557cc",
+  "created_at": "2016-06-23T09:09:34.752Z",
+  "updated_at": "2016-06-23T09:10:02.798Z",
+  "completed_at": "2016-06-23T09:10:02.798Z",
+  "type": "categorization",
+  "status": "completed",
+  "instruction": "Would you say this item is big or small?",
+  "params": {
+    "attachment_type": "text",
+    "attachment": "car",
+    "categories": ["big", "small"]
+  },
+  "callback_url": "http://www.example.com/callback",
+  "callback_completed": true,
+  "response": {
+    "category": "big"
+  },
+  "metadata": {},
+  "audits": [
+    {
+      "audited_by": "david@company.com",
+      "audited_at": "2016-06-24T15:32:03.585Z",
+      "audit_time_secs": 120,
+      "audit_result": "accepted",
+      "audit_source": "customer"
+    },
+    {
+      "audited_by": "auditor@scale.com",
+      "audited_at": "2016-06-23T10:01:02.352Z",
+      "audit_time_secs": 511,
+      "audit_result": "fixed",
+      "audit_source": "scale"
+    }
+  ],
+  "tags": ["experiment_1", "owner:david"],
+  "unique_id": "product_experiment_dg3d9x83"
+}
+```
+
+<Table>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Property</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Description</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>task_id</Table.Td>
+      <Table.Td>string</Table.Td>
+      <Table.Td>The task_id is the unique identifier for the task.</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>type</Table.Td>
+      <Table.Td>string</Table.Td>
+      <Table.Td>
+        The type of the task, for example, <code>imageannotation</code> or{" "}
+        <code>lidarsegmentation</code>.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>instructions</Table.Td>
+      <Table.Td>string</Table.Td>
+      <Table.Td>
+        A markdown-enabled string explaining the instructions for the task. You
+        can use markdown to show example images, give structure to your
+        instructions, and more. HTML tags are unsupported.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>params</Table.Td>
+      <Table.Td>object</Table.Td>
+      <Table.Td>
+        An object with the parameters of the task based on the type. For{" "}
+        <code>imageannotation</code> type tasks, for example, this will include
+        attachment and geometries.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>response</Table.Td>
+      <Table.Td>object</Table.Td>
+      <Table.Td>
+        An object corresponding to the response once the task is completed. Each
+        task type has its response format documented.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>status</Table.Td>
+      <Table.Td>string</Table.Td>
+      <Table.Td>
+        The status of the task, one of <code>pending</code>,{" "}
+        <code>completed</code>, <code>canceled</code>, or <code>error</code>.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>created_at</Table.Td>
+      <Table.Td>timestamp</Table.Td>
+      <Table.Td>
+        A string of the UTC timestamp for when the task was created.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>updated_at</Table.Td>
+      <Table.Td>timestamp</Table.Td>
+      <Table.Td>
+        A string of the UTC timestamp for when the task was last updated. If a
+        task is completed, this timestamp is usually the same as the{" "}
+        <code>completed_at</code> timestamp. However, sometimes a task can be
+        redone, and updated after its completion.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>completed_at</Table.Td>
+      <Table.Td>timestamp</Table.Td>
+      <Table.Td>
+        A string of the UTC timestamp for when the task was completed. This will
+        only be filled in after it is completed.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>callback_completed</Table.Td>
+      <Table.Td>boolean</Table.Td>
+      <Table.Td>
+        A boolean stating whether or not the callback succeeded. If the callback
+        returns with a 2xx status code, the value will be <code>true</code>. If
+        the callback fails to return a 2xx status code through all retries, then
+        the value will be <code>false</code>.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>customer_review_status</Table.Td>
+      <Table.Td>string</Table.Td>
+      <Table.Td>
+        The status of the QA'd task, one of <code>pending</code>,{" "}
+        <code>accepted</code>, <code>fixed</code>, or <code>rejected</code>.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>times_redone</Table.Td>
+      <Table.Td>number</Table.Td>
+      <Table.Td>
+        A counter for the number of times the task has been redone. It will be
+        present if the task has been redone at least once.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>metadata</Table.Td>
+      <Table.Td>object, default</Table.Td>
+      <Table.Td>
+        A set of key/value pairs that you can attach to a task object. It can be
+        useful for storing additional information about the task in a structured
+        format. See Task Metadata for more information.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>project_param_version</Table.Td>
+      <Table.Td>number | null</Table.Td>
+      <Table.Td>
+        Corresponds to the project version a task was created with, or{" "}
+        <code>null</code> if no project version exists.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>audits</Table.Td>
+      <Table.Td>array, default</Table.Td>
+      <Table.Td>An array of audit records.</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>unique_id</Table.Td>
+      <Table.Td>string, optional</Table.Td>
+      <Table.Td>
+        An arbitrary ID that you can assign to a task and then query for later.
+        This ID must be unique across all projects under your account, otherwise
+        the task submission will be rejected.
+      </Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>tags</Table.Td>
+      <Table.Td>array, optional</Table.Td>
+      <Table.Td>
+        Arbitrary labels that you can assign to a task. At most 5 tags are
+        allowed per task. You can query tasks with specific tags through the
+        task retrieval API.
+      </Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>

@@ -1,0 +1,131 @@
+import { Table } from "nextra/components";
+
+# Callbacks
+
+On your tasks, you can optionally supply a callback_url, a fully qualified URL that we will POST with the results of the task when completed. The data will be served as a JSON body (application/json). Alternately, you can set a default callback URL in your profile, which will be used for tasks that do not specify one.
+
+Additionally, in order to simplify testing and add support for email automation pipelines, you may provide an email address as the callback_url. In this case, each completed task will result in an email sent from hello@scale.ai with the body as the task's JSON payload.
+
+You should respond to the POST request with a 2xx status code. If we do not receive a 2xx status code, we will continue to retry up to 20 times over the course of the next 24 hours.
+
+If we receive a 2xx status code, the task will be populated with a true value for the callback_succeeded parameter. Otherwise, if we do not receive a 2xx status code on any retry, the task will be populated with a false value for the callback_succeeded parameter.
+
+```json filename="JSON"
+{
+  "task": {
+    "task_id": "576c41bf13e36b0600b02b34",
+    "completed_at": "2016-06-23T21:54:44.904Z",
+    "response": {
+      "category": "red"
+    },
+    "created_at": "2016-06-23T20:08:31.573Z",
+    "callback_url": "http://www.example.com/callback",
+    "type": "categorization",
+    "status": "completed",
+    "instruction": "Is this object red or blue?",
+    "params": {
+      "attachment_type": "text",
+      "attachment": "tomato",
+      "categories": ["red", "blue"]
+    },
+    "metadata": {}
+  },
+  "response": {
+    "category": "red"
+  },
+  "task_id": "576c41bf13e36b0600b02b34"
+}
+```
+
+---
+
+## Getting Started
+
+If you're just testing and want to try a few requests, the easiest way to get started is to use a RequestBin and send requests using the provided URL as the callback_url. You can also use ngrok to expose a local server to the internet for fast prototyping.
+
+We've also found Pipedream to be an easy-to-use platform to receive webhooks, view logs, take other actions.
+
+#### Authentication
+
+If you'd like to authenticate our callbacks, we set a scale-callback-auth HTTP header on each of our callbacks. The value will be equal to your Live Callback Auth Key shown on your dashboard. If this header is not set, or it is set incorrectly, the callback is not from Scale.
+
+#### Events that trigger a Callback
+
+Callbacks are sent for the following events:
+
+- Error on Task Creation (see Errors for more details)
+- Task Completion
+- Audit Status Changes (Approved, Rejected, Fixed)
+
+Tasks that are "Recalled" by Scale, meaning an operation on Scale's side converts completed tasks back to pending so they can have follow-on work done on them. This conversion is coordinated and communicated with you as the customer if it needs to happen.
+
+<div style={{ marginTop: "1.5rem" }}>
+  <Table>
+    <thead>
+      <Table.Tr>
+        <Table.Th>Property</Table.Th>
+        <Table.Th>Type</Table.Th>
+        <Table.Th>Description</Table.Th>
+      </Table.Tr>
+    </thead>
+    <tbody>
+      <Table.Tr>
+        <Table.Td>task_id</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          The task_id is the unique identifier for the task. It is identical to
+          task.task_id.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>status</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          The status of the task when it was completed. Normally{" "}
+          <code>completed</code>, but can also be <code>error</code> in the case
+          that a task failed to process. It is identical to task.status.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>response</Table.Td>
+        <Table.Td>object</Table.Td>
+        <Table.Td>
+          The response object of the completed request. It is identical to
+          task.response.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>task</Table.Td>
+        <Table.Td>object</Table.Td>
+        <Table.Td>The full Task Object for reference and convenience.</Table.Td>
+      </Table.Tr>
+    </tbody>
+  </Table>
+</div>
+
+## Re-sending a Callback
+
+This endpoint re-sends a callback for a completed or errored task to the callback_url.If your callback server had gone down, or otherwise missed receiving a task, this endpoint will tell Scale to resend the callback's original data (above) to your server.
+
+#### Installation
+
+```bash filename="bash"
+$ python -m pip install requests
+---
+```
+
+#### Example Usage
+
+```python filename="Python"
+
+import requests
+
+url = "https://api.skala.xyz/v1/task/taskId/send-callback"
+
+headers = {"accept": "application/json"}
+
+response = requests.post(url, headers=headers)
+
+print(response.text)
+
+```

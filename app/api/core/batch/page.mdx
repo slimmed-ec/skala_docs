@@ -1,0 +1,51 @@
+import { Table } from "nextra/components";
+
+# Batches Object Overview
+
+For high-volume projects, batches can optionally be used to further divide work inside a project. Batches can tie to specific datasets you use internally, or can be used to note which tasks were part of a weekly submission for example.
+
+Scale Enterprise Workflow:
+
+- Batch is created (status = in_progress)
+
+- Tasks are added to the batch by specifying the batch field on the task to be the name of your batch
+
+- The final task is completed, the batch is completed (status completed) and the callback is fired with the example to the right.
+
+Scale Rapid Workflow:
+
+- If you are using Scale Rapid, batches take on another purpose, where they are deeply linked to the task delivery model.
+
+- There are two types of batches, production batches, and calibration batches. Calibration batches help ensure your project is ready for humans to start working on your production data (with "normal" batches).
+
+- Batch is created (status = staging)
+
+- Tasks are added to the batch by specifying the batch field on the task to be the name of your batch
+
+- Batches need to be finalized (status = in_progress)
+
+- Once a batch is finalized, tasks will be submitted to our taskers to begin labeling. No tasks may be added to a batch once it has been finalized.
+
+- The final task is completed, the batch is completed (status completed) and the callback is fired with the example to the right.
+
+Scale Studio Workflow:
+
+- Batch is created (status = staging)
+
+- Tasks are added to the batch by specifying the batch field on the task to be the name of your batch
+
+- Batches need to be finalized (status = in_progress)
+
+- Once a batch is finalized, tasks will be submitted to your team workers to begin labeling. No tasks may be added to a batch once it has been finalized.
+
+- The final task is completed, the batch is completed (status completed) and the callback is fired with the example to the right.
+
+```json filename="batch.json"
+{
+  "project": "kitten_labeling",
+  "name": "kitten_labeling_2020-07",
+  "status": "staging",
+  "callback": "https://example.com/callback",
+  "created_at": "2020-07-01T09:09:10.108Z"
+}
+```

@@ -1,0 +1,124 @@
+import { Table, Callout } from "nextra/components";
+
+# API Errors
+
+## Attachment Processing Errors
+
+In the event of one or more task attachments having invalid data, the task callback will be invoked with an error response detailing the problems, and the task's status will be set to error. Additional detail about the error and failed attachments will be stored in the task response.
+
+<div style={{ marginTop: "1.5rem" }}>
+  <Table>
+    <thead>
+      <Table.Tr>
+        <Table.Th>Error Code</Table.Th>
+        <Table.Th>Meaning</Table.Th>
+      </Table.Tr>
+    </thead>
+    <tbody>
+      <Table.Tr>
+        <Table.Td>200</Table.Td>
+        <Table.Td>OK -- Everything worked as expected.</Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>400</Table.Td>
+        <Table.Td>
+          Bad Request -- The request was unacceptable, often due to missing a
+          required parameter.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>401</Table.Td>
+        <Table.Td>Unauthorized -- No valid API key provided.</Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>402</Table.Td>
+        <Table.Td>
+          Not enabled -- Please contact sales@scaleapi.com before creating this
+          type of task.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>404</Table.Td>
+        <Table.Td>Not Found -- The requested resource doesn't exist.</Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>409</Table.Td>
+        <Table.Td>
+          Conflict -- The provided idempotency key or unique_id is already in
+          use for a different request.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>429</Table.Td>
+        <Table.Td>
+          Too Many Requests -- Too many requests hit the API too quickly.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>500</Table.Td>
+        <Table.Td>
+          Internal Server Error -- We had a problem with our server. Try again
+          later.
+        </Table.Td>
+      </Table.Tr>
+    </tbody>
+  </Table>
+</div>
+
+## Example Error Formats
+
+These examples help you understand the structure and content of error messages returned by the API in different situations.
+
+**"Please include an attachment or attachments parameter":**
+
+This error occurs when you make a request to the API without including any attachment or attachments parameter. It indicates that you need to provide either a single attachment or an array of attachments in your API request for it to be processed successfully.
+
+This error occurs when you make a request to the API without including any attachment or attachments parameter. It indicates that you need to provide either a single attachment or an array of attachments in your API request for it to be processed successfully.
+
+#### 400 Bad Request
+
+```json filename="JSON"
+{
+  "status_code": 400,
+  "error": "Please include an attachment or attachments parameter."
+}
+```
+
+**"One or more attachments could not be downloaded":**
+
+This error message indicates that there was an issue with downloading one or more attachments specified in your API request. It suggests that there might be connectivity issues or problems with the specified attachment URLs. You may need to ensure that the attachment URLs are valid and accessible for the Scale API to download and process them.
+
+```json filename="JSON"
+// example task.response with failed attachment due to access issues
+{
+  "error": "One or more attachments could not be downloaded.", // reason for error
+  "attachments": [
+    {
+      "statusCode": 403, // HTTP code received when fetching attachment
+      "url": "http://example.com/kitten.png" // attachment URL
+    }
+  ]
+}
+```
+
+**"One or more attachments could not be downloaded (specific attachment errors)":**
+
+This error is similar to the previous one but provides more specific information about the attachments that couldn't be downloaded. It might include additional details such as the URLs or identifiers of the problematic attachments. This information helps you identify and troubleshoot the specific attachments that failed to download.
+
+```json filename="JSON"
+// example task.response with failed attachment processing
+{
+  "error": "One or more attachments could not be downloaded.", // reason for error
+  "frames": [
+    // frames which failed processing
+    {
+      "frame": 10, // frame #
+      "message": "Invalid JSON Format: Unexpected end of JSON input",
+      "attachment": {
+        "statusCode": 200, // HTTP code received when fetching attachment
+        "url": "http://example.com/lidar/frame10.json" // attachment URL
+      }
+    }
+  ]
+}
+```

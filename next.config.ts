@@ -1,18 +1,16 @@
-// import type { NextConfig } from "next";
-
-import { NextConfig } from "next";
-
+import type { NextConfig } from "next";
 import nextra from "nextra";
 
 const withNextra = nextra({
   latex: true,
-  defaultShowCopyCode: true,
+  search: {
+    codeblocks: false,
+  },
   contentDirBasePath: "/docs",
 });
 
 const nextConfig: NextConfig = withNextra({
   reactStrictMode: true,
-  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 });
 
 export default nextConfig;
