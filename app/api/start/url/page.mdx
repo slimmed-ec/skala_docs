@@ -1,6 +1,6 @@
 # Secure Result URLs
 
-For tasks like 2d segmentation, video, and lidar where results cannot simply be put in the task JSON, task responses are uploaded to an AWS S3 bucket scaleapi-results, publicly accessible with a URL in the form https://scaleapi-results.s3.us-west-1.amazonaws.com/:uuid. This is generally secure enough for our customers, as the UUIDs are unlikely to be guessed and cannot be linked back to a user or the data that the annotations correspond to.
+For tasks like 2d segmentation, video, and lidar where results cannot simply be put in the task JSON, task responses are uploaded to an AWS S3 bucket skalaapi-results, publicly accessible with a URL in the form https://skalaapi-results.s3.us-west-1.amazonaws.com/:uuid. This is generally secure enough for our customers, as the UUIDs are unlikely to be guessed and cannot be linked back to a user or the data that the annotations correspond to.
 
 We do have the ability to, rather than return publicly accessible URLs, instead, return URLs that require authentication for each request. This ensures that third parties without access to your Skala account will not be able to download your task responses, even if they manage to get a hold of or guess the URL.
 
