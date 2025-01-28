@@ -1,0 +1,96 @@
+# Create Multi-Stage Task
+
+This endpoint creates a multi-stage task. Multi-stage tasks are designed to handle complex full-scene labeling that spans multiple annotation types and modalities. They serve as a replacement for Scale’s legacy dependent tasks system, which required using multiple tasks to fully label a scene.
+
+## Use Cases
+
+Multi-stage tasks can be used for scenarios such as:
+
+- Linking 3D cuboids to their 2D bounding box/polygon projections.
+- Linking 3D cuboids to relevant top-down annotations.
+- Conditional labeling (e.g., categorizing scenes based on localization quality to determine whether to label them).
+
+## Required Parameters
+
+The following parameters are required for this task:
+
+- **`project`**
+- **`attachments`**
+- **`scene_format`**
+
+### Callback URL
+
+The `callback_url` is the URL that will receive a POST request when the task is completed. More details are provided in the [Callback](#callback) section.
+
+### Supported Attachment Types
+
+Skala supports the following attachment types for multi-stage tasks:
+
+- **(Recommended)** Sensor Fusion Scene (`.SFS`)
+- LiDAR frames (`.JSON`)
+
+---
+
+## Body Parameters
+
+### **`project`** _(string, required)_
+
+The name of the project to associate this task with. See the Projects Section for more details.
+
+### **`batch`** _(string)_
+
+The name of the batch to associate this task with. If specified, you do not need to specify the project, as the task will automatically be associated with the batch's project. For Skala Rapid projects, specifying a batch is required. See the Batches section for more details.
+
+### **`instruction`** _(string)_
+
+A markdown-enabled string or an embedded Google Doc iframe explaining how to do the task. You can use markdown to show example images, structure your instructions, and more.
+
+### **`callback_url`** _(string)_
+
+The full URL (including the scheme `http://` or `https://`) for the callback when the task is completed. See the Callback section for more details.
+
+### **`attachments`** _(array of strings, required)_
+
+URLs to the scene attachments. This can be a single URL for `.SFS` attachments or one URL per frame for `.JSON` attachments.
+
+### **`scene_format`** _(string, required)_
+
+Describes the type of file the attachment is.  
+Valid options:
+
+- `sensor_fusion` for `.SFS` attachments
+- `split_base64` for `.JSON` attachments
+
+### **`task_blueprint_id`** _(string)_
+
+The ID of the blueprint to use when creating the multi-stage task. If no blueprint is specified, Skala defaults to using the project’s most recent active blueprint.
+
+### **`metadata`** _(object)_
+
+A set of key/value pairs to attach to the task object. Useful for storing additional structured information about the task.  
+**Maximum Size**: 10 KB
+
+### **`unique_id`** _(string)_
+
+An arbitrary ID that you can assign to a task and query later. This ID must be unique across all projects under your account. If it is not unique, the task submission will be rejected. See [Avoiding Duplicate Tasks](#avoiding-duplicate-tasks) for more details.
+
+### **`priority`** _(integer)_
+
+A value that defines the priority of the task within a project.  
+Valid values:
+
+- `10` (low priority)
+- `20` (medium priority)
+- `30` (high priority)
+
+### **`clear_unique_id_on_error`** _(boolean)_
+
+If `true`, and a task errors out after being submitted, the `unique_id` on the task will be unset. This allows workflows where the same `unique_id` can be resubmitted to recover from errors automatically.
+
+### **`tags`** _(array of strings)_
+
+Arbitrary labels that you can assign to a task.  
+**Constraints**:
+
+- A maximum of 5 tags per task.
+- You can query tasks with specific tags using the task retrieval API.

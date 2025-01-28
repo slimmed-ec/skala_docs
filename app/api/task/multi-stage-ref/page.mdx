@@ -1,0 +1,59 @@
+# Multi-Stage Overview
+
+Multi-stage is our most advanced and flexible task type. It is designed to handle complex full-scene labeling that spans multiple annotation types and modalities. Multi-stage tasks serve as a replacement for Scale’s legacy dependent tasks system, which required using multiple tasks to fully label a scene.
+
+On a multi-stage task, labeling is split into multiple stages. Stages are organized in a pipeline such that they are dependent on one another and can run sequentially or in parallel. As a task passes through a stage, Skala adds labels corresponding to taxonomy classes enabled for that stage. Once all stages are completed, the task is finalized and delivered.
+
+---
+
+## Blueprints
+
+All multi-stage tasks are created with a **blueprint**, which is defined separately prior to task creation. Each task’s blueprint dictates:
+
+- Its stages.
+- Stage dependencies (pipeline).
+- Their respective taxonomies.
+- The values of any stage-specific parameters.
+
+Blueprints may also include **conditional logic**, enabling certain stages only if specific criteria are met (e.g., if there is an attribute with a specific value in the prior stage).
+
+### Key Blueprint Details:
+
+- Multi-stage projects can have one or many blueprints, but only one blueprint can be “active” at any given time.
+- New multi-stage tasks will use the project’s active blueprint by default.
+- A different blueprint can be specified during task creation, if necessary.
+- A list of all blueprints available for each multi-stage project is accessible from the Skala dashboard.
+
+---
+
+## Dependent Tasks vs Multi-Stage Tasks
+
+| Feature                | **Dependent Tasks**                                                              | **Multi-Stage Tasks**                                                                           |
+| ---------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Task Creation**      | - Multiple tasks per scene                                                       | - One task per scene                                                                            |
+|                        | - Complex payloads containing fully defined dependencies and taxonomies          | - Simple payload referencing a single pre-defined blueprint                                     |
+|                        | - Error-prone; frequently requires manual backfills to fix payload errors        | - On-rails; payloads are less likely to contain errors                                          |
+| **Project Management** | - Many projects, one for each dependency                                         | - One project                                                                                   |
+|                        | - Difficult to track different tasks across all projects for each scene          | - Each scene is labeled with just one task                                                      |
+| **Task Delivery**      | - Annotations are delivered across multiple tasks, each with a separate response | - Annotations are delivered in a single task with a single response (task-level) or stage-level |
+| **Auditing**           | - Multiple audits required across dependent tasks to fully audit a scene         | - One audit is sufficient to review all annotations in the scene                                |
+|                        | - Supports only **Standard Audits**                                              | - Supports both **Standard Audits** (stage-level delivery only) and **Fixless Audit**           |
+
+---
+
+## Task-level Delivery vs Stage-level Delivery
+
+Each multi-stage project can be configured to use either **task-level delivery** or **stage-level delivery**.
+
+### **Task-level Delivery**
+
+- A multi-stage task is delivered when **all of its stages are completed**.
+- Customer auditors can create **Fixless Audits**.
+- All annotations from all stages will be available for review.
+- Quality is tracked at the task level, covering annotations across all stages.
+
+### **Stage-level Delivery**
+
+- Annotations from each stage are delivered as soon as the **stage is completed** (even if other stages are still in progress).
+- Customer auditors can create either **Standard Audits** or **Fixless Audits**, which are conducted separately for each stage.
+- Quality is tracked separately for each stage, covering only the annotations added in that stage.

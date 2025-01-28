@@ -1,0 +1,103 @@
+# Key Concepts & Definitions
+
+To get high-quality ground truth data with Skala, your first step is to **create a project**. Within a project, you will upload data and create **tasks**, which are individual pieces of data to be labeled. Tasks can be grouped into **batches** to be launched for labeling. Every task will follow the same taxonomy defined at the project level.
+
+Once your data is hosted in a way that Skala can access it, you can use our UI or submit an API call to create tasks. After launching a batch of tasks for labeling, their statuses will initially be marked as **"pending."**
+
+**Skala Pro** customers can expect to receive tasks back according to the delivery schedule we have aligned with you. We support extremely high and dynamic volumes customized to your needs.
+
+Once a task has been labeled, the task status will change to **"completed"** and a JSON response will be associated with it. This response can be downloaded via our platform.
+
+Inside the web application, you can download a task's response individually or perform a bulk export over a filterable range of tasks. We also provide APIs to programmatically retrieve tasks by ID or list tasks based on customizable filter criteria. Additionally, we support **callbacks**, which allow for programmatic access to labeled data as tasks move to "completed" or "error" status.
+
+---
+
+## Task
+
+A **task** represents an individual unit of work to be completed. There is a one-to-one mapping between a task and the data to be labeled.
+
+For example, there is one task for each image, video, or piece of text to be labeled. Each task has a unique Skala-generated ID.
+
+To create a task using our API, refer to our [API Reference](#).
+
+---
+
+## Project
+
+A **project** organizes similar tasks based on instructions and the use case. All tasks within a project share the same instructions and annotation rules.
+
+Key Details:
+
+- A project is tied to one specific annotation use case, associated with a task type in the API reference.
+- Multiple projects can be created for different use cases.
+
+**Example:**
+
+- One project could be for categorizing scenes.
+- Another project could be for annotating images.
+
+Every task is explicitly tied to a project to keep things organized. To create a project using our API, refer to our [API Reference](#).
+
+---
+
+## Batch
+
+For **Skala Pro**, batches can optionally be used in high-volume projects to divide work within a project.
+
+**Use Cases for Batches:**
+
+- Tying tasks to specific internal datasets.
+- Organizing tasks based on weekly submissions.
+
+To create and launch a batch, refer to our [API Reference](#).
+
+---
+
+## Taxonomy
+
+A **taxonomy** is a collection of labels and information associated with those labels, defined at the project level. Each label is referred to as an **annotation**.
+
+Available annotation types include:
+
+- Box
+- Polygon
+- Point
+- Ellipse
+- Cuboid
+- Event
+- Text response
+- List selection
+- Tree selection
+- Date
+- Linear scale
+- Ranking
+
+### Components of a Taxonomy:
+
+1. **Annotation Classes**: Different types of an annotation.
+2. **Global Attributes**: Information about the entire task.
+3. **Annotation Attributes**: Information associated with a specific annotation.
+4. **Link Attributes**: Relationships between two annotations.
+
+### Example:
+
+**Use Case**:
+
+- Draw boxes around all cats and dogs in an image.
+- Indicate the total number of cats and dogs in the image.
+- Specify if each cat is sleeping or not.
+- Indicate which cat each dog is looking at (if applicable).
+
+**Taxonomy Design**:
+
+1. Create two classes of box annotations:
+   - One for "cat."
+   - One for "dog."
+2. Within the **cat** class:
+   - Define an annotation attribute: "Sleeping or Not Sleeping."
+3. Within the **dog** class:
+   - Define a link attribute to relate a "dog" box to a "cat" box and indicate a "looking at" relationship.
+4. Define a global attribute:
+   - Ask the labeler to indicate the total number of cats and dogs in the image.
+
+This taxonomy ensures clear relationships and precise labeling requirements for your use case.

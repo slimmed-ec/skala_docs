@@ -1,0 +1,109 @@
+# Create Sensor Fusion Tasks
+
+[**Recommended**] We recommend using this SDK documentation to create Sensor Fusion tasks.
+
+This endpoint creates a **sensorfusion task**. In this task, annotators load the sensor fusion scene and apply various annotations to mark objects or segment the point cloud. Sensor fusion scenes may contain **3D point clouds** (from LiDARs, radars, and/or point sensors) and **2D images/videos** (from camera sensors). Supported annotations include:
+
+- 3D cuboids
+- Point cloud segmentation
+- 3D keypoints
+- Top-down polygons
+
+---
+
+## Body Parameters
+
+### **`attachments`** _(array of strings, required)_
+
+List of URLs to the Sensor Fusion Scene objects you'd like to be labeled.
+
+> **Note**: For sensor fusion tasks, there must only be one URL provided.
+
+---
+
+### **`scene_format`** _(string, required)_
+
+The format of the scene provided.
+
+> Currently, only supports `sensor_fusion`.
+
+---
+
+### **`project`** _(string, required)_
+
+The name of the project to associate this task with.
+
+---
+
+### **`instruction`** _(string, required)_
+
+A markdown-enabled string or iframe-embedded Google Doc explaining how to do the task.  
+You can use markdown to:
+
+- Show example images
+- Structure your instructions
+- Provide clarity for the annotators
+
+---
+
+### **`annotation_definition`** _(array of objects, required)_
+
+List of annotation definitions to use for labeling.
+
+---
+
+### **`callback_url`** _(string, required)_
+
+The full URL (including the scheme `http://` or `https://`) that will be used for the callback when the task is completed.
+
+---
+
+### **`unique_id`** _(object)_
+
+An arbitrary ID that you can assign to a task and query for later.
+
+> **Note**: This ID must be unique across all projects under your account. If it is not unique, the task submission will be rejected. See [Avoiding Duplicate Tasks](#avoiding-duplicate-tasks) for more details.
+
+---
+
+### **`clear_unique_id_on_error`** _(boolean)_
+
+If set to `true`, the `unique_id` on the task will be unset if the task errors out after being submitted.  
+This allows workflows where you can re-submit the same `unique_id` to recover from errors automatically.
+
+---
+
+### **`is_frameless`** _(boolean, required)_
+
+Specifies whether to label as a frameless task.
+
+---
+
+### **`tags`** _(array of strings)_
+
+Arbitrary labels that you can assign to a task.  
+**Constraints**:
+
+- At most 5 tags are allowed per task.
+- You can query tasks with specific tags using the task retrieval API.
+
+```python filename="sensorfusion_task.py"
+import requests
+
+url = "https://api.skala.xyz/v1/task/sensorfusion"
+
+payload = {
+    "scene_format": "\"sensor_fusion\"",
+    "instruction": "**Instructions:** Please label all the things",
+    "callback_url": "https://example.com/callback"
+}
+headers = {
+    "accept": "application/json",
+    "content-type": "application/json"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print(response.text)
+
+```

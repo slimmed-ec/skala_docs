@@ -4,7 +4,7 @@ import { Table } from "nextra/components";
 
 On your tasks, you can optionally supply a callback_url, a fully qualified URL that we will POST with the results of the task when completed. The data will be served as a JSON body (application/json). Alternately, you can set a default callback URL in your profile, which will be used for tasks that do not specify one.
 
-Additionally, in order to simplify testing and add support for email automation pipelines, you may provide an email address as the callback_url. In this case, each completed task will result in an email sent from hello@scale.ai with the body as the task's JSON payload.
+Additionally, in order to simplify testing and add support for email automation pipelines, you may provide an email address as the callback_url. In this case, each completed task will result in an email sent from hello@skala.xyz with the body as the task's JSON payload.
 
 You should respond to the POST request with a 2xx status code. If we do not receive a 2xx status code, we will continue to retry up to 20 times over the course of the next 24 hours.
 
@@ -47,7 +47,7 @@ We've also found Pipedream to be an easy-to-use platform to receive webhooks, vi
 
 #### Authentication
 
-If you'd like to authenticate our callbacks, we set a scale-callback-auth HTTP header on each of our callbacks. The value will be equal to your Live Callback Auth Key shown on your dashboard. If this header is not set, or it is set incorrectly, the callback is not from Scale.
+If you'd like to authenticate our callbacks, we set a skala-callback-auth HTTP header on each of our callbacks. The value will be equal to your Live Callback Auth Key shown on your dashboard. If this header is not set, or it is set incorrectly, the callback is not from Skala.
 
 #### Events that trigger a Callback
 
@@ -57,7 +57,7 @@ Callbacks are sent for the following events:
 - Task Completion
 - Audit Status Changes (Approved, Rejected, Fixed)
 
-Tasks that are "Recalled" by Scale, meaning an operation on Scale's side converts completed tasks back to pending so they can have follow-on work done on them. This conversion is coordinated and communicated with you as the customer if it needs to happen.
+Tasks that are "Recalled" by Skala, meaning an operation on Skala's side converts completed tasks back to pending so they can have follow-on work done on them. This conversion is coordinated and communicated with you as the customer if it needs to happen.
 
 <div style={{ marginTop: "1.5rem" }}>
   <Table>
@@ -105,7 +105,7 @@ Tasks that are "Recalled" by Scale, meaning an operation on Scale's side convert
 
 ## Re-sending a Callback
 
-This endpoint re-sends a callback for a completed or errored task to the callback_url.If your callback server had gone down, or otherwise missed receiving a task, this endpoint will tell Scale to resend the callback's original data (above) to your server.
+This endpoint re-sends a callback for a completed or errored task to the callback_url.If your callback server had gone down, or otherwise missed receiving a task, this endpoint will tell Skala to resend the callback's original data (above) to your server.
 
 #### Installation
 
