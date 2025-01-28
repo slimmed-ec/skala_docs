@@ -6,7 +6,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Hr from "../components/ui/hr";
-import { link } from "fs";
 
 const items = [
   {
@@ -79,18 +78,13 @@ export default function IndexPage() {
             </div>
           </div>
           <div>
-            {/* <video autoPlay={true} playsInline={true} loop={true}>
-              <source src="/static/video/chart.webm" type="video/webm" />
-            </video> */}
             <video autoPlay={true} playsInline={true} loop={true} muted={true}>
               <source src="/video/chart.webm" type="video/webm" />
-              {/* <source src="/static/video/chart.mp4" type="video/mp4" /> */}
               Your browser does not support the video tag.
             </video>
           </div>
         </div>
       </div>
-      {/* === */}
       <Hr />
       <div className="container px-5 py-24 mx-auto xl:px-0">
         <h2 className="gd-title text-5xl font-semibold leading-[64px] text-center mx-auto mb-16">
