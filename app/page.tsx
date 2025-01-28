@@ -6,23 +6,44 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Hr from "../components/ui/hr";
+import { link } from "fs";
 
 const items = [
   {
-    title: "Nextra 4",
-    description: "Nextra 4 is here.",
+    title: "API Reference",
+    description:
+      "The Skala API is designed around the principles of REST. It uses resource-oriented URLs for predictable interactions, processes form-encoded request bodies, delivers JSON-encoded responses, and employs standard HTTP response codes, authentication protocols, and verbs.",
+    link: "/api/start/intro",
   },
   {
-    title: "Nextra 4",
-    description: "Nextra 4 is here.",
+    title: "Overview",
+    description:
+      "We are excited to work with you to accelerate the development of AI. Explore our documentation to quickly deliver value from your AI investments with high-quality data.",
+    link: "/docs/getting-started/overview",
   },
   {
-    title: "Nextra 4",
-    description: "Nextra 4 is here.",
+    title: "Peroject Overview",
+    description:
+      "Projects are a way of organizing similar tasks, so that one can share parameters among tasks, or control what workers are allowed to work on certain classes of tasks. The parameters associated with a project will be inherited by tasks created under that project. See Update Parameters (Project) for more information. ",
+    link: "/api/core/project",
   },
   {
-    title: "Nextra 4",
-    description: "Nextra 4 is here.",
+    title: "Taxonomy Service",
+    description:
+      "The Taxonomy Service is an intuitive, self-service tool designed to help teams efficiently create, update, and manage taxonomies. ",
+    link: "/api/task/taxonomy",
+  },
+  {
+    title: "Annotation Service",
+    description:
+      "In many cases, it is useful to have more human-judged metadata on top of each annotation for a given task, for example, measuring the occlusion-level of all vehicles in an image.",
+    link: "/api/core/annotation",
+  },
+  {
+    title: "Multi-Stage Tasks",
+    description:
+      "This endpoint creates a multi-stage task. Multi-stage tasks are designed to handle complex full-scene labeling that spans multiple annotation types and modalities. ",
+    link: "/api/task/multi-stage-task",
   },
 ];
 
@@ -43,14 +64,14 @@ export default function IndexPage() {
               provided by RAG.
             </p>
             <div className="flex items-center justify-center gap-4 lg:justify-start">
-              <a
-                href="sign-up"
+              <Link
+                href="https://skala.xyz"
                 className="px-6 py-3 font-semibold border rounded bg-w-800 border-inherit text-b-800 hover:bg-transparent hover:text-w-800"
               >
                 Get Started
-              </a>
+              </Link>
               <a
-                href="docs"
+                href="/docs/welcome"
                 className="px-6 py-3 font-semibold border rounded border-w-100 text-w-800 hover:bg-w-800 hover:text-b-800"
               >
                 Explore Docs
@@ -79,7 +100,7 @@ export default function IndexPage() {
           {items.map((item, i) => (
             <Link
               key={i}
-              href={"/"}
+              href={item.link}
               className="event-card group rounded-2xl relative text-left !opacity-100 !visible focus-visible:outline outline-[rgba(255,255,255,0.64)] outline-offset-[3px] bg-white/[0.01]"
             >
               <div className="flex items-center xl:items-start py-6 xl:py-8 justify-start h-full transition-colors bg-[#D1AAD7]/[0.01]">
@@ -96,7 +117,7 @@ export default function IndexPage() {
                     {item.description}
                   </p>
                   <p className="mt-3">
-                    LLMs struggle with extensive data analysis.
+                    {/* LLMs struggle with extensive data analysis. */}
                   </p>
                 </div>
               </div>
