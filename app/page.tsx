@@ -71,12 +71,19 @@ export default function IndexPage() {
               >
                 Documentation
               </Link>
-              <a
+              <Link
                 href="/api/start/intro"
                 className="px-6 py-3 font-semibold border rounded border-w-100 text-w-800 hover:bg-w-800 hover:text-b-800"
               >
                 API Reference
-              </a>
+              </Link>
+              <Link
+                target="blank"
+                href="https://demo.skala.xyz"
+                className="px-6 py-3 font-semibold border rounded bg-w-800 border-inherit text-b-800 hover:bg-transparent hover:text-w-800"
+              >
+                Demo
+              </Link>
             </div>
           </div>
           <div>

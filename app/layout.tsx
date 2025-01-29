@@ -5,6 +5,7 @@ import { getPageMap } from "nextra/page-map";
 import "nextra-theme-docs/style.css";
 import { SkalaLogo } from "@/components/ui/logo";
 import "./globals.css";
+import { Globe } from "lucide-react";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nextra.site"),
@@ -30,7 +31,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const navbar = (
-    <Navbar logo={<SkalaLogo width={150} />} chatLink="https://skala.xyz" />
+    <Navbar
+      logo={<SkalaLogo width={150} />}
+      chatLink="https://skala.xyz"
+      chatIcon={<Globe />}
+    />
   );
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
@@ -40,7 +45,7 @@ export default async function RootLayout({
           banner={<Banner storageKey="Nextra 2">Skala AI V3.2</Banner>}
           navbar={navbar}
           footer={<Footer />}
-          editLink="Edit this page on GitHub"
+          editLink="Visit the website"
           docsRepositoryBase="https://docs.skala.xyz"
           sidebar={{ defaultMenuCollapseLevel: 1 }}
           pageMap={await getPageMap()}
