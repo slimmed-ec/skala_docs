@@ -53,10 +53,9 @@ export default function IndexPage() {
       {/* === */}
       <div className="bg-black overflow-hidden">
         <div className="container max-w-(--nextra-content-width) px-5 xl:-px-0 grid items-start lg:grid-cols-2 mx-auto pt-[152px] gap-10 lg:gap-[145px] text-center lg:text-left">
-          <div className="t-5 xl:mt-[80px]">
+          <div className="t-5">
             <h1 className="pb-4 text-5xl font-semibold leading-tight lg:text-8xl text-w-800 sm:break-normal">
               Getting Started with SKALA AI
-              {/* <span className="xl:block gd-title">Base AI Bots</span> */}
             </h1>
             <p className="pt-4 pb-8 text-base font-normal text-w-100 lg:text-xl max-w-xl mx-auto lg:mx-0">
               Skala AI transforms raw data into high-quality training datasets,
@@ -75,7 +74,7 @@ export default function IndexPage() {
                 href="/api/start/intro"
                 className="px-6 py-3 font-semibold border rounded border-w-100 text-w-800 hover:bg-w-800 hover:text-b-800"
               >
-                API Reference
+                API <span className="hidden lg:flex">Reference</span>
               </Link>
               <Link
                 target="blank"
@@ -86,7 +85,9 @@ export default function IndexPage() {
               </Link>
             </div>
           </div>
-          <div>
+
+          {/* Bottom-align image */}
+          <div className="flex items-end">
             <Image
               width={717}
               height={702}
@@ -94,10 +95,6 @@ export default function IndexPage() {
               alt="knowledge-base"
               className="grayscale hover:grayscale-0 transition-all duration-300"
             />
-            {/* <video autoPlay={true} playsInline={true} loop={true} muted={true}>
-              <source src="/video/chart.webm" type="video/webm" />
-              Your browser does not support the video tag.
-            </video> */}
           </div>
         </div>
       </div>
