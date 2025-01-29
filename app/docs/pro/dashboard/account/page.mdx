@@ -1,109 +1,127 @@
-# Manage your Account
+Here’s your improved version with clearer structure, smoother readability, and refined language while keeping all the necessary details intact.
 
-## Overview
+---
 
-Customers can add new users, change user roles, and manage their team defaults by clicking the Your Team link found on the top right corner of the dashboard.
+# **Manage Your Account**
+
+## **Overview**
+
+The **Skala platform** allows teams to efficiently manage their account settings, including **adding new users, modifying user roles, and configuring team defaults**. These actions can be accessed via the **Your Team** link in the top right corner of the dashboard.
 
 ![Deskripsi gambar](/img/pro-dashboard-1.webp)
 
-## Adding New Users
+---
 
-To have someone join your team, scroll down to the **Invite Member** button at the bottom of the page. Clicking this button will allow you to specify the email address of the user would like to invite.
+## **Adding New Users**
 
-Once this happens, Skala will send that user an invitation to join your team. You will see this person listed as **Invited** once you refresh the page:
+To invite a new team member:
+
+1. Scroll to the **Invite Member** button at the bottom of the page.
+2. Enter the **email address** of the user you want to invite.
+3. Skala will send an **email invitation** to the specified user.
+
+Once invited, the user will appear as **Invited** in your team list. Refresh the page to verify the status.
 
 ![Deskripsi gambar](/img/pro-dashboard-3.webp)
 
-To re-send an invitation to join your team, you may click **Remove**, and then re-invite them with the Invite Member button.
+### **Re-sending an Invitation**
 
-When a new user accepts an invitation to join your team, they will be asked for their name, company, and other details for their profile.
+If an invited user has not accepted, you can **remove the pending invitation** and re-invite them by clicking **Remove**, then selecting **Invite Member** again.
 
-#
+### **User Registration Process**
 
-<div style={{ 
-  border: "1px solid #388E3C", 
-  padding: "5px", 
-  borderRadius: "8px", 
-  backgroundColor: "rgba(56, 142, 60, 0.0.5)", 
-  color: "#2C6B2F", 
-  fontFamily: "Courier, halfspace", 
-  fontSize: "0.7rem", 
-  lineHeight: "1.6"
-}}>
-  <strong style={{ color: "#66BB6A" }}>‼️</strong> <strong>Good to Know!</strong><br /><br />
-  **Users must accept your invite to join your team. There is not a way to have a user join a different team once signed up.**<br /><br />
-  **If the user has already made a new account as opposed to clicking your invite, please email [support@skala.xyz](mailto:support@skala.xyz) and we will be able to move the user to your team on your behalf.**
+When a user accepts the invitation, they will be prompted to provide their **name, company information, and other profile details** before joining the team.
 
-</div>
+---
 
-#
-
-<div
-  style={{
-    border: "1px solid #FF9800",
-    padding: "5px",
-    borderRadius: "8px",
-    backgroundColor: "rgba(255, 152, 0, 0.05)",
-    color: "#FF5722",
-    fontFamily: "Courier, halfspace",
-    fontSize: "0.7rem",
-    lineHeight: "1.6",
-  }}
+> 💡 **Good to Know!**  
+> Users must accept your invite to join your team. Once an account is created, it **cannot be transferred** to another team.
 >
-  <strong style={{ color: "#FF7043" }}>‼️</strong> <strong>Users</strong> can
-  not be added to more than one team. If a user needs access to multiple Skala
-  organizations, a best practice is to add a + with the second team name to
-  their email address.
-  <br />
-  <br />
-  As an example, you could have joe.schmoe@skala.xyz be in the Skala account and
-  joe.schmoe+second@skala.xyz be in the second account. Most email providers ignore
-  anything after the + so you could still receive emails as expected.
-</div>
+> If a user **accidentally creates a new account** instead of accepting an invite, please email [support@skala.xyz](mailto:support@skala.xyz) so we can assist in moving them to your team.
 
-## User Roles
+---
 
-Users can be in 1 of 3 roles. These roles are:
+> ⚠️ **Important:**  
+> A user **cannot** be added to multiple teams under the same account.
+>
+> If a user needs access to multiple Skala organizations, a best practice is to use **email aliases**.
+>
+> **Example:**
+>
+> - `joe.schmoe@skala.xyz` (for Team A)
+> - `joe.schmoe+second@skala.xyz` (for Team B)
+>
+> Most email providers **ignore anything after the "+"** symbol, so the user will still receive all emails in the same inbox.
 
-- **Member** - Members can see and audit all tasks submitted, and create and edit projects.
+---
 
-- **Manager** - In addition to all things a Member can do, Managers can manage team members, retrieve API keys to submit new tasks, and view billing information.
+## **User Roles & Permissions**
 
-- **Admin** - A team can only have 1 admin. Admins manage every aspect of a Skala account. On the back-end, all projects, team members, and API keys roll up to this admin user. If you need to change the admin user for any reason, please reach out to support@skala.xyz and we will be happy to assist.
+Each team member can be assigned one of the following roles:
 
-## Team Details
+- **Member** – Can view and audit all tasks, create projects, and edit existing projects.
+- **Manager** – Has all **Member** privileges plus the ability to **manage team members, retrieve API keys, and access billing information**.
+- **Admin** – Each team can have only **one Admin**. Admins oversee **all projects, team members, API keys, and billing**. If an admin change is required, please contact **support@skala.xyz**.
 
-In addition to managing your team, you can also change your team name and callback URL under the team details header.
+---
 
-- Your **team name** will be used as the prefix as your project names
-- Your **callback URL** is the default callback URL if the callback_url field is not provided. This is the URL where we will POST the results of your annotations
+## **Team Details**
+
+In addition to managing users, you can also **modify team settings**, including:
+
+- **Team Name** – Used as the prefix for project names.
+- **Callback URL** – If a `callback_url` is not provided in an API request, the **default team callback URL** will be used.
 
 ![Deskripsi gambar](/img/pro-dashboard-5.webp)
 
-## API Keys
+---
 
-To retrieve your **API keys**, please navigate to API Keys link found by clicking on the user profile icon in the top right of the page.
+## **API Keys Management**
 
-Within this page, you can also **Add a new key** or **Delete your existing one**.
+To retrieve your **API keys**, navigate to the **API Keys** section under your user profile in the top right corner of the dashboard.
 
-Skala offers live and test **API keys**.
+Within this section, you can:
 
-- The **live key** is used to send tasks to our labeling team for completion.
+- **Generate a new API key**.
+- **Delete an existing API key** if it is no longer needed.
 
-- The **test key** will not be sent to our labeling team. The purpose of this functionality is to test out our API on our website
+Skala provides two types of **API keys**:
 
-If you’d like to authenticate our callbacks, we set a skala-callback-auth HTTP header on each of our callbacks. The value will be equal to your Live Callback Auth Key shown on your dashboard. If this header is not set, or it is set incorrectly, the callback is not from Skala.
+- **Live API Key** – Used for **submitting real tasks** to the labeling team.
+- **Test API Key** – Allows **testing API interactions** without submitting actual tasks.
+
+For **secure callback authentication**, Skala includes a **`skala-callback-auth` HTTP header** in all callback responses. The value of this header will match the **Live Callback Auth Key** found on your dashboard. If the header is missing or incorrect, the callback is not from Skala.
 
 ![Deskripsi gambar](/img/pro-dashboard-api.webp)
 
-## Billing
+---
 
-For our enterprise customers, your account is billed via an invoice. Please contact your Skala account representative for more details on billing.
+## **Billing & Payments**
 
-For our on-demand customers, we display the number of completed tasks, accrued balance, and last invoices in our billing tab. Your payment information can be updated in the teams button by clicking on the user profile on the top right of your page.
+- **Enterprise Customers** – Accounts are billed via invoices. For details, contact your **Skala account representative**.
+- **On-Demand Customers** – The **Billing Tab** displays:
+  - Completed tasks
+  - Current balance
+  - Most recent invoices
 
-## Integrations
+To update payment details, go to the **Teams** section under your user profile.
 
-Within the customer dashboard, you are able to set up cloud storage integrations with AWS, Google Cloud Platform, and Azure.
+---
 
-For detailed instructions, please see the secure attachment access guide.
+## **Cloud Integrations**
+
+Skala allows seamless **cloud storage integrations** with:
+
+- **AWS (Amazon Web Services)**
+- **Google Cloud Platform (GCP)**
+- **Microsoft Azure**
+
+For **detailed setup instructions**, refer to the **Secure Attachment Access Guide**.
+
+---
+
+### **🚀 Manage Your Team with Ease**
+
+With the **Skala Account Management system**, you can streamline **user roles, API integrations, billing, and team settings**—ensuring a smooth and efficient workflow.
+
+For additional support, reach out to **[support@skala.xyz](mailto:support@skala.xyz)**. 🚀
