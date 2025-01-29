@@ -1,54 +1,101 @@
-# Overview
+# **🚀 Overview: Skala Taxonomy Service**
 
-The Taxonomy Service is an intuitive, self-service tool designed to help teams efficiently create, update, and manage taxonomies. With its streamlined version management feature, users can easily track changes and ensure consistency across multiple versions of taxonomy-related tasks. By providing a unique identifier for each taxonomy, this tool guarantees that your data is always properly labeled and organized.
+The **Taxonomy Service** is a powerful, **self-service tool** designed to help teams **effortlessly create, update, and manage taxonomies**. With its **intuitive version management system**, users can seamlessly track changes, maintain consistency across multiple taxonomy versions, and ensure their data remains properly labeled and structured.
 
-Whether you're managing simple annotations or complex tasks like Lidar segmentation, the Taxonomy Service simplifies the process, so you can focus more on accuracy and less on manual management. It ensures that every step in your workflow, from data labeling to final version tracking, is handled seamlessly, reducing errors and maintaining high standards across your operations.
+Whether you're handling **simple annotations** or **complex tasks like LiDAR segmentation**, the Taxonomy Service automates the management process, reducing manual workload and improving **accuracy, efficiency, and scalability**. From **data labeling** to **final version tracking**, this service ensures **error-free workflow execution** while maintaining **high operational standards**.
 
-## Supported Task Types
+---
 
-Currently, Taxonomy Service supports the following task types:
+## **🔹 Supported Task Types**
 
-- Segment Annotation
-- LidarAnnotation
-- Lidar TopDown
-- LidarLinking
-- LidarSegmentation
-- VideoAnnotation
-- ImageAnnotation
-- Sensor Fusion
+The **Taxonomy Service** currently supports the following task types:
 
-## Taxonomy SRN
+✅ **Image & Video Annotation:**
 
-A Taxonomy SRN (Service Resource Name) is a unique identifier for a specific taxonomy version. It allows you to compare and track different versions of taxonomies across tasks ensuring consistency and accuracy for your labeling requirements.
+- **SegmentAnnotation**
+- **VideoAnnotation**
+- **ImageAnnotation**
 
-### Format
+✅ **LiDAR-Based Tasks:**
+
+- **LidarAnnotation**
+- **LidarTopDown**
+- **LidarLinking**
+- **LidarSegmentation**
+
+✅ **Sensor Fusion:**
+
+- **SensorFusion**
+
+Each task type is seamlessly integrated with the **Taxonomy Service**, ensuring smooth **annotation tracking, version control, and workflow automation**.
+
+---
+
+## **🔹 Taxonomy SRN (Service Resource Name)**
+
+A **Taxonomy SRN** is a **unique identifier** assigned to each taxonomy version. It allows teams to **compare, track, and manage different taxonomy versions** across projects, ensuring **standardization and accuracy** throughout the labeling process.
+
+### **📌 SRN Format:**
 
 ```
 srn:skala:avcv:taxonomy:taxonomy:<projectId>/<name>/<version>/<hash>
 ```
 
-### Example
+### **📌 Example:**
 
 ```
 srn:skala:avcv:taxonomy:taxonomy:654dd0785yytd22829f342hs/user_myproject_lidar_test/v1/0ac7578c6b32107816e071aa11353bab61bb6h1f
 ```
 
-## Task Creation Process
+With this system, every taxonomy version remains **easily referenceable and comparable**, minimizing mislabeling risks.
 
-When Taxonomy Service is enabled on your project, tasks that are created will automatically be updated with the latest taxonomy that was published using Taxonomy Service. Therefore, you can remove taxonomy JSON during the task creation process.
+---
 
-> **Note:** If you keep the taxonomy JSON in the task creation API call, the taxonomy JSON will override any taxonomy published using Taxonomy Service.
+## **🔹 Task Creation Process**
 
-## Dependent Tasks
+When the **Taxonomy Service** is enabled in your project, all **newly created tasks** will automatically inherit the **latest published taxonomy version**. This eliminates the need to manually include taxonomy JSON during task creation.
 
-Each dependent project must have its own taxonomy defined in Taxonomy Service. For example, if you have a LidarAnnotation project and dependent LidarLinking and LidarTopDown projects, each must have its taxonomy defined separately in Teddy.
+> **⚠️ Important:**  
+> If you **manually include taxonomy JSON** in a task creation API call, it will **override** the taxonomy published via the **Taxonomy Service**. To ensure consistency, remove taxonomy JSON from the API request unless an override is explicitly required.
 
-### Dependent Projects
+---
 
-Taxonomy Service supports dependent projects, managing their taxonomies automatically. Ensure each project is set up with its own taxonomy, and remove any taxonomy-related parameters from the scripts and task parameters.
+## **🔹 Managing Dependent Tasks & Projects**
 
-## Tracking
+For projects with **dependent tasks**, each **dependent project** must define its **own taxonomy** within the **Taxonomy Service**.
 
-Use the Taxonomy Metrics tool to review and monitor where the Taxonomies and policies were applied.
+### **📌 Example Scenario:**
 
-Once you are on the **Taxonomy Metrics** page, you can track the batches and the status for these tasks, understanding the progress as well as the work done for them.
+If you manage a **LidarAnnotation** project with dependent **LidarLinking** and **LidarTopDown** projects, each project must have its taxonomy **independently defined** in **Teddy**.
+
+The **Taxonomy Service** automatically synchronizes taxonomies across dependent projects, ensuring that:  
+✅ Each **dependent project** has its **own version-controlled taxonomy**.  
+✅ Redundant **taxonomy parameters** in scripts and task definitions are eliminated.  
+✅ Consistency is **maintained across multiple AI labeling workflows**.
+
+---
+
+## **🔹 Tracking & Monitoring Taxonomies**
+
+The **Taxonomy Metrics Tool** provides real-time visibility into taxonomy usage across tasks.
+
+### **📌 How to Track Taxonomies:**
+
+1️⃣ Navigate to the **Taxonomy Metrics** dashboard.  
+2️⃣ Monitor **where** and **how** taxonomies & policies were applied.  
+3️⃣ Track **batches and task status** to gain insights into **progress & performance**.  
+4️⃣ Identify **potential issues** early and ensure taxonomy consistency across labeling projects.
+
+By leveraging **Taxonomy Metrics**, teams can enhance **workflow transparency, improve labeling accuracy, and maintain full auditability of dataset versions**.
+
+---
+
+### **🚀 Summary: Why Use Skala's Taxonomy Service?**
+
+✅ **Automated Taxonomy Versioning** – Keep track of every update, reducing manual errors.  
+✅ **Effortless Task Management** – Automatically update tasks with the latest taxonomy.  
+✅ **Seamless Integration** – Supports multiple annotation and sensor fusion tasks.  
+✅ **Enterprise-Grade Consistency** – Ensure all taxonomies remain synchronized across projects.  
+✅ **Advanced Tracking & Insights** – Gain real-time visibility into dataset structuring & usage.
+
+**Start optimizing your annotation workflows with Skala’s Taxonomy Service today!** 🚀
