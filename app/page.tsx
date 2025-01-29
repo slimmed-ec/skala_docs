@@ -72,7 +72,7 @@ export default function IndexPage() {
               </Link>
               <Link
                 href="/api/start/intro"
-                className="px-6 py-3 font-semibold border rounded border-w-100 text-w-800 hover:bg-w-800 hover:text-b-800"
+                className="px-6 py-3 font-semibold border rounded border-w-100 text-w-800 hover:bg-w-800 hover:text-b-800 flex gap-2"
               >
                 API <span className="hidden lg:flex">Reference</span>
               </Link>

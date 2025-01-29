@@ -1,39 +1,66 @@
-# API Compatibility Policy
+# **API Compatibility Policy**
 
-The Skala REST API is versioned via a prefix in the URL. Currently, we only support v1 of the API via https://api.skala.xyz/v1/. Within an API version, we strive to only make backward-compatible changes to the API. This means that a client that integrates with v1 of our REST API will continue to work when querying v1 in the future.
+The **Skala REST API** follows a structured **versioning system** to ensure seamless integration and long-term compatibility. The API is versioned via a **prefix in the URL**, with the current supported version being:
 
-## Backward-compatible changes
+```
+https://api.skala.xyz/v1/
+```
 
-Backward-compatible changes can be made within an API version, and include:
+Within a major API version (e.g., **v1**), we strive to **maintain backward compatibility**, ensuring that existing integrations continue to function without disruption. Any breaking changes will only be introduced in a **new API version** (e.g., **v2**).
 
-- Adding new optional request parameters or HTTP request headers.
+---
 
-- Making a required request parameter optional.
+## **🔹 Backward-Compatible Changes**
 
-- Rejecting a request which contains invalid parameter values, as a result of improved parsing and validation. Improperly formed requests that were previously accepted may be later rejected.
+Backward-compatible changes are modifications that **do not break existing integrations** and may include:
 
-- Adding new fields to a response or callback object.
+✅ **Enhanced Request Handling**
 
-- Adding new values for existing parameters that have enumerated sets of values.
+- Adding new **optional** request parameters or HTTP headers.
+- Making a previously required parameter **optional**.
 
-- Undocumented functionality may be removed or changed at any time.
+✅ **Improved Input Validation**
 
-## Backward-incompatible changes
+- Rejecting improperly formatted requests that were previously accepted due to **improved validation and parsing**.
 
-Backward-incompatible changes will only happen in a new version of the API, and include:
+✅ **Expanded Response Data**
 
-- Changing the behavior of existing request parameters.
+- Adding **new fields** to API responses or callback objects.
+- Introducing **new enumerated values** for existing request parameters.
 
-- Changing the names of elements used in API POST or PUT requests.
+⚠️ **Note:** Any **undocumented functionality** may be modified or removed at any time without prior notice.
 
-- Adding a new required request parameter.
+---
 
-- Changing the meaning of parameters that have enumerated values, or the meanings of those parameter values.
+## **🔹 Backward-Incompatible Changes**
 
-- Changing the meaning or type of existing response or callback fields.
+Breaking changes will only occur in a **new API version** (e.g., moving from `v1` to `v2`). These include:
 
-- Changing the meaning of an API route.
+❌ **Modifications to Existing Request Parameters**
 
-## Deprecation policy
+- Changing the behavior of current request parameters.
+- Renaming request parameters used in **POST** or **PUT** operations.
+- Adding new **required** request parameters.
 
-At times, we will deprecate and remove parts of our API that can no longer be supported. In this case, we will make a best effort to identify and notify affected users, and will continue to support the deprecated API during the migration process.
+❌ **Changes to Response Data**
+
+- Modifying the **meaning or type** of an existing response or callback field.
+- Altering the semantics of enumerated values.
+
+❌ **Structural API Modifications**
+
+- Modifying the structure of an API route or changing its **expected behavior**.
+
+To **ensure a smooth transition**, any breaking changes will be **introduced in a new API version**, allowing developers to migrate at their own pace.
+
+---
+
+## **🔹 API Deprecation Policy**
+
+As the API evolves, certain features or endpoints may become deprecated. In such cases, we will:
+
+🔹 **Proactively notify affected users** to ensure they have ample time to transition.  
+🔹 **Provide continued support** for deprecated features during a migration period.  
+🔹 **Offer migration guidance** to help developers transition smoothly to newer API versions.
+
+We are committed to maintaining **stability, reliability, and transparency** in our API lifecycle. If you have any questions about API changes, reach out to our **support team**.
