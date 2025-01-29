@@ -1,10 +1,220 @@
 # API Reference
 
-The Skala API is designed around the principles of REST. It uses resource-oriented URLs for predictable interactions, processes form-encoded request bodies, delivers JSON-encoded responses, and employs standard HTTP response codes, authentication protocols, and verbs.
+The **Skala API** is designed around **RESTful principles**, ensuring a consistent and predictable way to interact with Skala’s services. It follows a **resource-oriented architecture**, making it easy to manage objects such as users, transactions, and projects.
 
-The Skala API provides a sandbox mode, allowing you to test your integrations without affecting your live data or interacting with production systems. The API key used during request authentication determines whether the interaction occurs in live mode or sandbox mode.
+## Overview
 
-Please note, the Skala API does not support bulk updates. Each request is tailored to work on a single object.
+The Skala API is structured to be:
+
+- **Reliable** – Built with RESTful principles for consistency.
+- **Secure** – Requires authentication using API keys.
+- **Efficient** – Uses form-encoded request bodies and JSON-encoded responses.
+- **Standardized** – Employs standard HTTP response codes, authentication mechanisms, and verbs.
+
+---
+
+## API Modes
+
+The Skala API provides **two operational modes**:
+
+1. **Live Mode** – Any actions performed in this mode affect production data.
+2. **Sandbox Mode** – A test environment allowing safe experimentation without impacting live data.
+
+The API key used in authentication determines which mode the request is executed in. **Be cautious when using live API keys, as they affect real data.**
+
+---
+
+## API Authentication
+
+All requests to the Skala API require **authentication** via API keys. The API uses **Bearer Authentication** for secure access.
+
+### **Authentication Example (Using cURL)**
+
+```sh
+curl -X GET "https://api.skala.com/v1/projects" \
+  -H "Authorization: Bearer YOUR_SECRET_API_KEY" \
+  -H "Content-Type: application/json"
+```
+
+### **Passing API Keys in the Header**
+
+- The API key must be included in the `Authorization` header.
+- Ensure you **never expose** your secret API keys in client-side applications.
+
+---
+
+## API Request Structure
+
+### **Base URL**
+
+The Skala API has the following base URL:
+
+```
+https://api.skala.com/v1/
+```
+
+### **Request Headers**
+
+Each request should include the following headers:
+
+| **Header**      | **Value**                    | **Description**                          |
+| --------------- | ---------------------------- | ---------------------------------------- |
+| `Authorization` | `Bearer YOUR_SECRET_API_KEY` | Required for authentication              |
+| `Content-Type`  | `application/json`           | Indicates that the request contains JSON |
+| `Accept`        | `application/json`           | Specifies the expected response format   |
+
+---
+
+## API Endpoints
+
+The Skala API allows interaction with different objects through endpoints. Below are some commonly used endpoints:
+
+### **Projects API**
+
+| **Action**       | **Endpoint**        | **Method** | **Description**                         |
+| ---------------- | ------------------- | ---------- | --------------------------------------- |
+| Get all projects | `/v1/projects`      | `GET`      | Fetches a list of projects              |
+| Get project      | `/v1/projects/{id}` | `GET`      | Retrieves details of a specific project |
+| Create project   | `/v1/projects`      | `POST`     | Creates a new project                   |
+| Update project   | `/v1/projects/{id}` | `PUT`      | Updates an existing project             |
+| Delete project   | `/v1/projects/{id}` | `DELETE`   | Removes a project                       |
+
+#### **Example Request: Fetching a Specific Project**
+
+```sh
+curl -X GET "https://api.skala.com/v1/projects/12345" \
+  -H "Authorization: Bearer YOUR_SECRET_API_KEY"
+```
+
+#### **Example Response**
+
+```json
+{
+  "id": "12345",
+  "name": "AI Data Labeling",
+  "status": "active",
+  "created_at": "2024-01-01T12:00:00Z"
+}
+```
+
+---
+
+### **Task API**
+
+| **Action**    | **Endpoint**     | **Method** | **Description**             |
+| ------------- | ---------------- | ---------- | --------------------------- |
+| Get all tasks | `/v1/tasks`      | `GET`      | Fetches a list of tasks     |
+| Get task      | `/v1/tasks/{id}` | `GET`      | Retrieves details of a task |
+| Create task   | `/v1/tasks`      | `POST`     | Creates a new labeling task |
+| Update task   | `/v1/tasks/{id}` | `PUT`      | Updates an existing task    |
+| Delete task   | `/v1/tasks/{id}` | `DELETE`   | Removes a task              |
+
+#### **Example Request: Creating a Task**
+
+```sh
+curl -X POST "https://api.skala.com/v1/tasks" \
+  -H "Authorization: Bearer YOUR_SECRET_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "project_id": "12345",
+    "description": "Labeling AI data",
+    "priority": "high"
+  }'
+```
+
+#### **Example Response**
+
+```json
+{
+  "id": "67890",
+  "project_id": "12345",
+  "description": "Labeling AI data",
+  "priority": "high",
+  "status": "pending",
+  "created_at": "2024-01-01T12:30:00Z"
+}
+```
+
+---
+
+## API Rate Limits
+
+To ensure system stability, the Skala API enforces **rate limits**:
+
+| **Limit Type**   | **Max Requests**   |
+| ---------------- | ------------------ |
+| Task Creation    | 30 requests/second |
+| Project Creation | 10 requests/second |
+
+If you exceed these limits, you will receive a **429 Too Many Requests** response.
+
+#### **Example Error Response for Exceeded Rate Limit**
+
+```json
+{
+  "error": "Rate limit exceeded. Try again later."
+}
+```
+
+---
+
+## API Error Handling
+
+The Skala API follows **standard HTTP status codes** for error handling:
+
+| **Status Code**             | **Meaning**                           |
+| --------------------------- | ------------------------------------- |
+| `200 OK`                    | Successful request                    |
+| `400 Bad Request`           | Invalid request parameters            |
+| `401 Unauthorized`          | Missing or invalid API key            |
+| `403 Forbidden`             | Insufficient permissions              |
+| `404 Not Found`             | The requested resource does not exist |
+| `429 Too Many Requests`     | Exceeded rate limit                   |
+| `500 Internal Server Error` | An issue occurred on the server-side  |
+
+---
+
+## Webhooks & Callbacks
+
+Skala supports **webhooks** to notify your system about task status updates.
+
+### **Example Webhook Payload**
+
+```json
+{
+  "event": "task.completed",
+  "task_id": "67890",
+  "status": "completed",
+  "completed_at": "2024-01-01T14:00:00Z",
+  "metadata": {
+    "user_id": "98765"
+  }
+}
+```
+
+To receive webhooks, set up a callback URL in your project settings. Ensure your webhook handler:
+
+- **Verifies authenticity** of requests.
+- **Handles retries** for failed requests.
+- **Responds with 2xx status** to confirm receipt.
+
+---
+
+## Best Practices
+
+- **Use Pagination**: Fetch large datasets efficiently using `limit` and `offset` parameters.
+- **Secure API Keys**: Never expose secret keys in client-side applications.
+- **Monitor Usage**: Keep track of rate limits to prevent disruptions.
+- **Use Webhooks**: Automate workflows by receiving real-time updates.
+- **Enable Logging**: Maintain logs for debugging API interactions.
+
+---
+
+## Conclusion
+
+The Skala API provides a **flexible**, **secure**, and **scalable** way to interact with Skala’s AI-powered data labeling services. Whether you're managing projects, creating tasks, or retrieving labeled data, the API offers comprehensive features to support your workflows.
+
+For more details, refer to the **full API documentation** or contact **support@skala.com**.
 
 #### Python
 

@@ -1,68 +1,89 @@
 import { Table } from "nextra/components";
 
-# Annotation Object Overview
+# **Annotation Object Overview**
 
-## Annotation Attributes
+## **Annotation Attributes**
 
-In many cases, it is useful to have more human-judged metadata on top of each annotation for a given task, for example, measuring the occlusion-level of all vehicles in an image.
+Annotations can include additional **human-judged metadata** that enhances labeled data.  
+For example, you might want to **measure occlusion levels** of vehicles in an image.
 
-To achieve this, we support annotation_attributes, an object representing additional attributes that you'd like to capture per image annotation.
+To achieve this, we support **annotation_attributes**, an object that defines additional properties for each annotation.
 
-You may use annotation_attributes to define categorical attributes, numerical attributes, angle attributes, text attributes and more for each annotation.
+### **Supported Use Cases**
 
-You define the type of the attribute using the type property of the attribute, if no type is specified, it will default to a category type attribute. See the Annotation Attribute Types below for more details.
+✅ **Define categorical attributes** (e.g., parked or not).  
+✅ **Capture numerical values** (e.g., speed, distance).  
+✅ **Specify angles** (e.g., object orientation).  
+✅ **Allow free text input** (e.g., object description).  
+✅ **Create relationships between annotations** (e.g., linking two objects).
 
-The format for annotation_attributes is an object whose key-value pairs all specify attributes of each annotation that you want to capture. The schema differs slightly based on the type of attribute.
+---
 
-<Table>
-  <thead>
-    <Table.Tr>
-      <Table.Th>Attribute Type</Table.Th>
-      <Table.Th>Description</Table.Th>
-    </Table.Tr>
-  </thead>
-  <tbody>
-    <Table.Tr>
-      <Table.Td>Categorical</Table.Td>
-      <Table.Td>
-        Multiple choice attribute, with an optional ability to enable selecting
-        multiple options simultaneously.
-      </Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>Numerical</Table.Td>
-      <Table.Td>Integer input</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>Angle</Table.Td>
-      <Table.Td>
-        Input to select a value between 0 and 360 with a visual interface
-        supporting angles.
-      </Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>Text</Table.Td>
-      <Table.Td>Input for free text</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>X/Y Offset</Table.Td>
-      <Table.Td>
-        Input to select width or height within a box annotation
-      </Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>Linked</Table.Td>
-      <Table.Td>Input to link one annotation to another annotation</Table.Td>
-    </Table.Tr>
-  </tbody>
-</Table>
+## **Annotation Attribute Types**
 
-### Request Format
+Each attribute must specify a **type**, determining how data is collected.  
+If no type is provided, it defaults to a **Categorical Attribute**.
 
-To create a task with attributes, simply add the annotation_attributes parameter to your task creation request using the format described above.
+<div style={{ marginTop: "1.5rem" }}>
+  <Table>
+    <thead>
+      <Table.Tr>
+        <Table.Th>Attribute Type</Table.Th>
+        <Table.Th>Description</Table.Th>
+      </Table.Tr>
+    </thead>
+    <tbody>
+      <Table.Tr>
+        <Table.Td>Categorical</Table.Td>
+        <Table.Td>
+          Multiple-choice attribute, with an option to **select multiple
+          choices**.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>Numerical</Table.Td>
+        <Table.Td>
+          Integer input, used for **speed, distance, size, etc.**
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>Angle</Table.Td>
+        <Table.Td>
+          Select a **value between 0 and 360 degrees** (e.g., **direction,
+          rotation**).
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>Text</Table.Td>
+        <Table.Td>
+          Free text input for **descriptions, labels, or custom annotations**.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>X/Y Offset</Table.Td>
+        <Table.Td>Define width or height within a **box annotation**.</Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>Linked</Table.Td>
+        <Table.Td>
+          **Link one annotation to another** (e.g., vehicle following another).
+        </Table.Td>
+      </Table.Tr>
+    </tbody>
+  </Table>
+</div>
+
+---
+
+## **Request Format**
+
+To create a **task with attributes**, include the **annotation_attributes** parameter in your API request.
+
+---
+
+### **Example: JSON Payload for Image Annotation**
 
 ```json filename="/tasks/imageannotation.json"
-
 {
   "callback_url": "http://www.example.com/callback",
   "instruction": "Draw boxes around the vehicles in the image.",
@@ -70,25 +91,17 @@ To create a task with attributes, simply add the annotation_attributes parameter
   "attachment": "http://i.imgur.com/v4cBreD.jpg",
   "geometries": {
     "box": {
-      "objects_to_annotate": ["car","pedestrian"],
+      "objects_to_annotate": ["car", "pedestrian"]
     }
-  }
+  },
   "annotation_attributes": {
     "parked": {
       "description": "Is the car currently parked?",
-      "choices": [
-        "Yes",
-        "No"
-      ]
+      "choices": ["Yes", "No"]
     },
     "heading": {
-      "description": "Which direction is the car heading",
-      "choices": [
-        "left",
-        "right",
-        "back",
-        "front"
-      ],
+      "description": "Which direction is the car heading?",
+      "choices": ["left", "right", "back", "front"],
       "conditions": {
         "label_condition": {
           "label": "car"

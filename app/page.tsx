@@ -51,37 +51,43 @@ export default function IndexPage() {
     <>
       {/* === */}
       <div className="bg-black overflow-hidden">
-        <div className="container max-w-(--nextra-content-width) px-5 xl:-px-0 grid items-start lg:grid-cols-2 mx-auto pt-[152px] pb-[96px] gap-10 lg:gap-[145px] text-center lg:text-left">
+        <div className="container max-w-(--nextra-content-width) px-5 xl:-px-0 grid items-start lg:grid-cols-2 mx-auto pt-[152px] gap-10 lg:gap-[145px] text-center lg:text-left">
           <div className="t-5 xl:mt-[80px]">
             <h1 className="pb-4 text-5xl font-semibold leading-tight lg:text-8xl text-w-800 sm:break-normal">
-              Knowledge
-              <span className="xl:block gd-title">Base AI Bots</span>
+              Getting Started with SKALA AI
+              {/* <span className="xl:block gd-title">Base AI Bots</span> */}
             </h1>
             <p className="pt-4 pb-8 text-base font-normal text-w-100 lg:text-xl max-w-xl mx-auto lg:mx-0">
-              Effortlessly integrate diverse enterprise data sources to enhance
-              AI responses with the structured knowledge recall mechanism
-              provided by RAG.
+              Skala AI transforms raw data into high-quality training datasets,
+              leveraging machine learning-powered pre-labeling, advanced
+              tooling, and customizable levels of human review to ensure
+              precision and scalability.
             </p>
             <div className="flex items-center justify-center gap-4 lg:justify-start">
               <Link
-                href="https://skala.xyz"
+                href="/docs/welcome"
                 className="px-6 py-3 font-semibold border rounded bg-w-800 border-inherit text-b-800 hover:bg-transparent hover:text-w-800"
               >
-                Get Started
+                Documentation
               </Link>
               <a
-                href="/docs/welcome"
+                href="/api/start/intro"
                 className="px-6 py-3 font-semibold border rounded border-w-100 text-w-800 hover:bg-w-800 hover:text-b-800"
               >
-                Explore Docs
+                API Reference
               </a>
             </div>
           </div>
           <div>
-            <video autoPlay={true} playsInline={true} loop={true} muted={true}>
+            <img
+              src="/k4fnk4f.webp"
+              alt="knowledge-base"
+              className="grayscale hover:grayscale-0 transition-all duration-300"
+            />
+            {/* <video autoPlay={true} playsInline={true} loop={true} muted={true}>
               <source src="/video/chart.webm" type="video/webm" />
               Your browser does not support the video tag.
-            </video>
+            </video> */}
           </div>
         </div>
       </div>

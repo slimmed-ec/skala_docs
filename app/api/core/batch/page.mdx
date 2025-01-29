@@ -1,44 +1,76 @@
 import { Table } from "nextra/components";
 
-# Batches Object Overview
+# **Batches Object Overview**
 
-For high-volume projects, batches can optionally be used to further divide work inside a project. Batches can tie to specific datasets you use internally, or can be used to note which tasks were part of a weekly submission for example.
+## **What are Batches?**
 
-Skala Enterprise Workflow:
+For **high-volume projects**, **batches** help organize and manage **large-scale tasks** by dividing them into **smaller units**. Batches can:
 
-- Batch is created (status = in_progress)
+- **Group tasks** based on **dataset types**.
+- **Organize work by submission periods** (e.g., weekly submissions).
+- **Track task progress** and improve **workflow efficiency**.
 
-- Tasks are added to the batch by specifying the batch field on the task to be the name of your batch
+---
 
-- The final task is completed, the batch is completed (status completed) and the callback is fired with the example to the right.
+## **Batch Workflows in Skala**
 
-Skala Rapid Workflow:
+### **1️⃣ Skala Enterprise Workflow**
 
-- If you are using Skala Rapid, batches take on another purpose, where they are deeply linked to the task delivery model.
+Designed for **large-scale enterprise projects** with **ongoing task submissions**.
 
-- There are two types of batches, production batches, and calibration batches. Calibration batches help ensure your project is ready for humans to start working on your production data (with "normal" batches).
+**Process Flow:**
 
-- Batch is created (status = staging)
+1. **Batch is created** → `status = in_progress`
+2. **Tasks are added to the batch** → Specify the `batch` field on the task using the **batch name**.
+3. **Once the final task is completed**:
+   - The **batch is marked as completed** → `status = completed`
+   - A **callback is fired** to notify completion.
 
-- Tasks are added to the batch by specifying the batch field on the task to be the name of your batch
+---
 
-- Batches need to be finalized (status = in_progress)
+### **2️⃣ Skala Rapid Workflow**
 
-- Once a batch is finalized, tasks will be submitted to our taskers to begin labeling. No tasks may be added to a batch once it has been finalized.
+For **real-time data processing**, Skala Rapid provides a more **structured** approach.
 
-- The final task is completed, the batch is completed (status completed) and the callback is fired with the example to the right.
+🚀 **Key Differences in Skala Rapid:**
 
-Skala Studio Workflow:
+- **Two types of batches:**
+  - **Production Batches** → Used for normal labeling tasks.
+  - **Calibration Batches** → Used to **test and validate** the labeling process **before full-scale production**.
 
-- Batch is created (status = staging)
+**Process Flow:**
 
-- Tasks are added to the batch by specifying the batch field on the task to be the name of your batch
+1. **Batch is created** → `status = staging`
+2. **Tasks are added to the batch** → Specify the `batch` field.
+3. **Batches must be finalized** → `status = in_progress`
+4. **Once finalized:**
+   - Tasks are **submitted for labeling**.
+   - **No new tasks can be added** to the batch.
+5. **When the final task is completed**:
+   - The batch is **marked as completed** → `status = completed`
+   - A **callback is fired** for confirmation.
 
-- Batches need to be finalized (status = in_progress)
+---
 
-- Once a batch is finalized, tasks will be submitted to your team workers to begin labeling. No tasks may be added to a batch once it has been finalized.
+### **3️⃣ Skala Studio Workflow**
 
-- The final task is completed, the batch is completed (status completed) and the callback is fired with the example to the right.
+For **internal team-based labeling**, Skala Studio ensures **controlled processing**.
+
+**Process Flow:**
+
+1. **Batch is created** → `status = staging`
+2. **Tasks are added to the batch** → Specify the `batch` field.
+3. **Batches must be finalized** → `status = in_progress`
+4. **Once finalized:**
+   - Tasks are **sent to your internal team** for labeling.
+   - **No new tasks can be added** to the batch.
+5. **When the final task is completed**:
+   - The batch is **marked as completed** → `status = completed`
+   - A **callback is fired** for confirmation.
+
+---
+
+## **Batch Object Example**
 
 ```json filename="batch.json"
 {
@@ -49,3 +81,52 @@ Skala Studio Workflow:
   "created_at": "2020-07-01T09:09:10.108Z"
 }
 ```
+
+---
+
+## **Batch Statuses & Definitions**
+
+<div style={{ marginTop: "1.5rem" }}>
+  <Table>
+    <thead>
+      <Table.Tr>
+        <Table.Th>Status</Table.Th>
+        <Table.Th>Description</Table.Th>
+      </Table.Tr>
+    </thead>
+    <tbody>
+      <Table.Tr>
+        <Table.Td>
+          <code>staging</code>
+        </Table.Td>
+        <Table.Td>Batch is created but not yet finalized.</Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>
+          <code>in_progress</code>
+        </Table.Td>
+        <Table.Td>
+          Batch has been finalized and is now processing tasks.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>
+          <code>completed</code>
+        </Table.Td>
+        <Table.Td>All tasks in the batch are completed.</Table.Td>
+      </Table.Tr>
+    </tbody>
+  </Table>
+</div>
+
+---
+
+## **Summary of Workflows**
+
+| **Workflow**   | **Purpose**                                                          |
+| -------------- | -------------------------------------------------------------------- |
+| **Enterprise** | Large-scale project management with ongoing submissions.             |
+| **Rapid**      | Time-sensitive processing with **calibration & production batches**. |
+| **Studio**     | Internal team-based task labeling.                                   |
+
+> **Note:** Batches provide structured **task organization**, **workflow automation**, and **real-time tracking**.

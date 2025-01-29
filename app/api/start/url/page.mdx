@@ -1,11 +1,126 @@
 # Secure Result URLs
 
-For tasks like 2d segmentation, video, and lidar where results cannot simply be put in the task JSON, task responses are uploaded to an AWS S3 bucket skalaapi-results, publicly accessible with a URL in the form https://skalaapi-results.s3.us-west-1.amazonaws.com/:uuid. This is generally secure enough for our customers, as the UUIDs are unlikely to be guessed and cannot be linked back to a user or the data that the annotations correspond to.
+## Overview
 
-We do have the ability to, rather than return publicly accessible URLs, instead, return URLs that require authentication for each request. This ensures that third parties without access to your Skala account will not be able to download your task responses, even if they manage to get a hold of or guess the URL.
+For certain tasks—such as **2D segmentation, video annotation, and LiDAR processing**—results **cannot be embedded** directly within the **task JSON response** due to their size and complexity. Instead, Skala **uploads task results** to an AWS S3 bucket:
 
-#### Secure result URLs will be of the form
+```
+https://skalaapi-results.s3.us-west-1.amazonaws.com/:uuid
+```
 
-https://api.skala.xyz/v1/task/:taskId/response_url/:uuid, and in order to be fetched HTTP basic auth (with your account's live API key) must be used.
+These **result URLs** provide access to **completed annotations**, enabling efficient retrieval and processing.
 
-Please contact Skala Support to enable secure result URLs for your account.
+---
+
+## **Security Considerations**
+
+By default, **Skala result URLs** are **publicly accessible**. However, they are **secure** because:
+
+- The **UUID-based URLs** are **unique** and **difficult to guess**.
+- They **cannot be linked back to a user** or **the corresponding data** unless explicitly shared.
+- URLs are **not indexed** by search engines.
+
+For many customers, this **default security level** is **sufficient**.
+
+---
+
+## **Enabling Secure Result URLs**
+
+For **higher security requirements**, Skala offers **authenticated result URLs**, ensuring that:
+✅ **Only authorized users** with Skala API access can retrieve results.  
+✅ **Even if a URL is leaked**, it remains **inaccessible** to unauthorized parties.
+
+> **Secure result URLs require authentication** and **must be enabled manually** for your account.
+
+---
+
+## **Secure Result URL Format**
+
+Once enabled, secure URLs follow this structure:
+
+```
+https://api.skala.xyz/v1/task/:taskId/response_url/:uuid
+```
+
+To access these URLs, you must **authenticate** using **HTTP Basic Auth** with your Skala **Live API Key**.
+
+---
+
+## **Fetching Secure Results**
+
+### **Example Request (Python)**
+
+```python filename="Python"
+
+import requests
+from requests.auth import HTTPBasicAuth
+
+# Replace with your taskId and UUID
+task_id = "12345"
+uuid = "abcdef-98765"
+
+url = f"https://api.skala.xyz/v1/task/{task_id}/response_url/{uuid}"
+
+# Use your Live API Key for authentication
+auth = HTTPBasicAuth("YOUR_LIVE_API_KEY", "")
+
+response = requests.get(url, auth=auth)
+
+if response.status_code == 200:
+    print("Download successful!")
+    print(response.json())  # or save the response content
+else:
+    print(f"Error: {response.status_code} - {response.text}")
+
+```
+
+### **Example Request (cURL)**
+
+```sh
+curl -X GET "https://api.skala.xyz/v1/task/12345/response_url/abcdef-98765" \
+  -H "Authorization: Basic YOUR_BASE64_ENCODED_KEY"
+```
+
+> **Tip:** The **Base64-encoded key** is derived from `"YOUR_LIVE_API_KEY:"` using Base64 encoding.
+
+---
+
+## **How to Enable Secure Result URLs**
+
+1. **Contact Skala Support** at **[support@skala.xyz](mailto:support@skala.xyz)**.
+2. Request **Secure Result URLs** to be **enabled** for your account.
+3. Once activated, all result URLs will require **authentication** before access.
+
+---
+
+## **Comparison: Public vs. Secure URLs**
+
+| **Feature**        | **Public Result URLs**                       | **Secure Result URLs**                   |
+| ------------------ | -------------------------------------------- | ---------------------------------------- |
+| **Access Control** | Open to anyone with the link                 | Requires authentication with API key     |
+| **Security Level** | UUID-based security (hard to guess)          | Fully protected (even if leaked)         |
+| **Best For**       | Most customers with no strict security needs | Customers requiring **extra security**   |
+| **Retrieval**      | Direct link access                           | Requires API request with authentication |
+
+---
+
+## **Best Practices for Secure Data Access**
+
+- **Do not share result URLs** with unauthorized users.
+- **Use HTTPS** to ensure encrypted data transmission.
+- **Rotate API keys periodically** to enhance security.
+- **Enable Secure Result URLs** if **your data requires strict access control**.
+
+---
+
+## **Summary**
+
+| **Feature**                      | **Details**                                                 |
+| -------------------------------- | ----------------------------------------------------------- |
+| **Default Result URL**           | `https://skalaapi-results.s3.us-west-1.amazonaws.com/:uuid` |
+| **Secure Result URL** (Optional) | `https://api.skala.xyz/v1/task/:taskId/response_url/:uuid`  |
+| **Authentication** (Secure URLs) | Requires **Live API Key** (HTTP Basic Auth)                 |
+| **How to Enable Secure URLs**    | Contact **Skala Support**                                   |
+| **Security Recommendation**      | Use **Secure Result URLs** for sensitive data               |
+
+For additional assistance, visit our **[API Documentation](https://api.skala.xyz/docs)** or contact **support@skala.xyz**.

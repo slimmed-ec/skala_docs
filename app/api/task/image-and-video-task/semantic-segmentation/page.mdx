@@ -1,0 +1,208 @@
+import { Table } from "nextra/components";
+
+# **Create a Semantic Segmentation Annotation Task**
+
+This API endpoint allows you to create a **segmentannotation** task.  
+Labelers will classify each pixel in an image according to the labels provided,  
+resulting in a **semantic, pixel-wise, dense segmentation.**
+
+Additionally, **instance-aware segmentations (panoptic segmentation)** are supported  
+using **LabelDescription** objects.
+
+### **Key Features**
+
+✅ Supports **semantic segmentation** (each pixel labeled).  
+✅ Supports **panoptic segmentation** (instance-aware labeling).  
+✅ Provides **per-label mask images** for convenience.  
+✅ Allows **pre-labeled hypotheses** for refinement.  
+✅ **Callback URLs & metadata** for tracking tasks.
+
+---
+
+## **Request Parameters**
+
+### **Body Parameters**
+
+Below is a breakdown of the parameters you can use when creating a task.
+
+<div style={{ marginTop: "1.5rem" }}>
+  <Table>
+    <thead>
+      <Table.Tr>
+        <Table.Th>Parameter</Table.Th>
+        <Table.Th>Type</Table.Th>
+        <Table.Th>Description</Table.Th>
+      </Table.Tr>
+    </thead>
+    <tbody>
+      <Table.Tr>
+        <Table.Td>project</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>The **project name** to associate this task with.</Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>batch</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          (Optional) A **markdown-enabled string** or **Google Doc link** with
+          segmentation instructions.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>callback_url</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          The **full URL (http:// or https://) or email address** where the task
+          results will be sent upon completion.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>attachment</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          ✅ **(Required)** The **URL** of the image to be segmented.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>attachment_type</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          Describes the **attachment type**. Currently, only **"image"** is
+          supported.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>labels</Table.Td>
+        <Table.Td>array of strings</Table.Td>
+        <Table.Td>
+          ✅ **(Required)** An array of **up to 50 labels** used for
+          segmentation.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>annotation_attributes</Table.Td>
+        <Table.Td>object</Table.Td>
+        <Table.Td>
+          Additional **attributes per annotation** (for instance segmentation).
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>allow_unlabeled</Table.Td>
+        <Table.Td>boolean</Table.Td>
+        <Table.Td>
+          If set to **true**, the task allows **unlabeled pixels**. If false,
+          **all pixels must be labeled**.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>hypothesis</Table.Td>
+        <Table.Td>object</Table.Td>
+        <Table.Td>
+          A **pre-labeled annotation** to be used as a starting point.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>metadata</Table.Td>
+        <Table.Td>object</Table.Td>
+        <Table.Td>
+          A **set of key/value pairs** attached to the task (max **10KB**).
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>context_attachments</Table.Td>
+        <Table.Td>array of objects</Table.Td>
+        <Table.Td>
+          **Reference images** shown to annotators. Cannot be labeled.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>unique_id</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          An **optional unique identifier** for the task. Must be **globally
+          unique** across all projects.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>clear_unique_id_on_error</Table.Td>
+        <Table.Td>boolean</Table.Td>
+        <Table.Td>
+          If **true**, the unique ID will be **cleared if the task fails**. This
+          allows for easy re-submission.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>tags</Table.Td>
+        <Table.Td>array of strings</Table.Td>
+        <Table.Td>
+          Arbitrary **task labels** (max **5 per task**). Useful for filtering
+          via the API.
+        </Table.Td>
+      </Table.Tr>
+    </tbody>
+  </Table>
+</div>
+
+---
+
+## **Example Request**
+
+Here's an example JSON request to **create a segmentation task**:
+
+```json filename="segmentannotation.json"
+{
+  "project": "semantic_segmentation_project",
+  "callback_url": "http://www.example.com/callback",
+  "attachment": "https://example.com/image.jpg",
+  "attachment_type": "image",
+  "labels": ["Car", "Pedestrian", "Tree", "Road"],
+  "annotation_attributes": {
+    "confidence": {
+      "description": "Confidence level of annotation",
+      "choices": ["Low", "Medium", "High"]
+    }
+  },
+  "allow_unlabeled": false,
+  "metadata": {
+    "dataset": "Urban Scenes",
+    "annotator_id": "12345"
+  },
+  "unique_id": "task_001",
+  "tags": ["urban", "daylight"]
+}
+```
+
+---
+
+## **Expected Response**
+
+Upon success, you will receive a JSON response containing the **task_id**:
+
+```json filename="response.json"
+{
+  "task_id": "abc123xyz",
+  "status": "pending",
+  "created_at": "2024-01-29T10:30:00Z",
+  "labels": ["Car", "Pedestrian", "Tree", "Road"]
+}
+```
+
+---
+
+## **Best Practices**
+
+- **Use descriptive labels** to avoid confusion.
+- **Enable `allow_unlabeled`** if your images have background pixels.
+- **Use `metadata`** for tracking dataset properties.
+- **Store the `task_id`** to manage task retrieval.
+- **Set up `callback_url`** for real-time processing.
+
+---
+
+## **Final Thoughts**
+
+This endpoint is **highly flexible**, allowing for **precise segmentation** while supporting **custom metadata, instance-aware segmentation, and pre-labeled data refinement**. 🚀
+
+If you need **panoptic segmentation**, ensure your labels include **instance IDs** in `LabelDescription` objects.
+
+For **support or customization requests**, contact Skala Support.

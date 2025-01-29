@@ -1,64 +1,162 @@
 # Authentication
 
-Skala uses "HTTP Basic Auth" to authenticate API calls. Skala expects for the API key to be included in all API requests to our platform. "HTTP Basic Auth" supports a username and password. Provide your API key as the basic auth username value. There is not a password, you should leave that blank.
+## Overview
+
+Skala uses **HTTP Basic Authentication** to authenticate API calls. Every request to Skala’s API requires an **API key**, which should be included as the **Basic Auth username**. Skala does not require a password, so the password field should be left **blank**.
+
+---
+
+## Authentication Example (Python)
+
+Below is an example of how to authenticate API requests using **Python**:
 
 ```python filename="Python"
 
 import requests
-
 from requests.auth import HTTPBasicAuth
 
 url = "https://api.skala.xyz/v1/tasks"
 
 headers = {"Accept": "application/json"}
 
-auth = HTTPBasicAuth('{{ApiKey}}', '') # No password
+auth = HTTPBasicAuth('{{ApiKey}}', '')  # No password required
 
-response = requests.request("GET", url, headers=headers, auth=auth)
+response = requests.get(url, headers=headers, auth=auth)
 
 print(response.text)
-
 ```
 
-### Getting your API key
+> **Tip:** Ensure you replace `{{ApiKey}}` with your actual API key before making requests.
 
-Your API keys are conveniently located in your dashboard. Access to your dashboard is gained by either logging in into your existing account or creating a new one signing up. Once you're in, navigate to your profile and select 'API Key' from the drop-down menu.
+---
 
-Don't see the "API Keys" section?.
-Have your account admin head over to https://dashboard.skala.xyz/settings/team and update your role to be a "Manager" - Only Admins and Managers have access to API Keys for your security.
+## Getting Your API Key
 
-### Test and Live Modes
+Your **API keys** are available in your **Skala dashboard**. Follow these steps to retrieve them:
 
-To make the API as explorable as possible, accounts have test mode and live mode API keys. There is no "switch" for changing between modes, just use the appropriate key to perform a live or test API requests.
+1. **Log in** to your [Skala dashboard](https://dashboard.skala.xyz).
+2. Navigate to **Profile** → **API Keys**.
+3. Copy the **Live API Key** or **Test API Key**, depending on your needs.
 
-Requests made with test mode credentials are not completed by a human, and therefore have incorrect test responses. Requests made with live mode credentials are always completed by a human and will incur a charge.
+### **Troubleshooting API Key Access**
 
-### Environments are Separate
+If you don’t see the **API Keys** section:
 
-The live and test modes of Skala are truly self-contained and separate. If you have created a Project in the live mode, and try to reference it when creating a task in testing mode, you will get an error.
+- Ensure your account role is **Admin** or **Manager**.
+- If needed, ask an **Admin** to update your role via [Team Settings](https://dashboard.skala.xyz/settings/team).
 
-The Skala AI web application has a toggle to switch between viewing the live and test modes below the project list on the left-hand side.
+---
 
-### Callback Authentication
+## Test Mode vs Live Mode
 
-If you'd like to authenticate our callbacks, we set a scale-callback-auth HTTP header on each of our callbacks. The value will be equal to your Live Callback Auth Key shown on your dashboard. If this header is not set, or it is set incorrectly, the callback is not from Skala.
+Skala provides **separate environments** for testing and production:
 
-### How does Basic Auth work?
+| **Mode**      | **Behavior**                                   | **Notes**                                           |
+| ------------- | ---------------------------------------------- | --------------------------------------------------- |
+| **Test Mode** | Allows safe API testing                        | No real human labeling, responses contain test data |
+| **Live Mode** | Executes real API requests with human labeling | Live requests **incur charges**                     |
 
-The end goal of our authentication is to be able to specify an `Authorization` header on the requests we're making to the Skala platform.
+> **Switching Modes:** Skala **does not** require an explicit switch. Use the appropriate API key to determine whether the request is in **test mode** or **live mode**.
 
-Let's pretend our Skala API Key is live_SkalaRocks.
+### **Important Note:**
 
-Basic Auth puts the username and password together separated by a colon so that it looks like this username:password. Because Skala doesn't have a password, the value is going to be simply username: (with the trailing colon)
+Live and test environments are **completely separate**. For example, if you create a **Project** in **Live Mode**, you **cannot** reference it in **Test Mode**.
 
-In our example, this value would now be live_SkalaRocks:
+To toggle between viewing **Live Mode** and **Test Mode** in the Skala **web app**, use the **environment switcher** in the project list.
 
-We then need to do a Base64 encoding for this new string. Virtually all programming languages come with a helper function that can convert a string into it's Base64 encoded version.
+---
 
-In our example, our encoded string would now look like bGl2ZV9TY2FsZVJvY2tzOg==
+## Callback Authentication
 
-The authorization header when using basic auth starts with Basic , and then the encoded string.
+If you'd like to **verify** that callbacks from Skala are legitimate, use the **`scale-callback-auth`** HTTP header.
 
-Following the example, the Authorization header on our request would be Basic bGl2ZV9TY2FsZVJvY2tzOg==
+- Each callback from Skala will include this **authentication header**.
+- The value of this header will match your **Live Callback Auth Key**, available in your **dashboard**.
+- If the header is **missing** or **incorrect**, the callback **did not originate** from Skala.
 
-If you look at a request header in Postman or in our docs, you'll see the encoded version of your API key being set directly in the header.
+---
+
+## How HTTP Basic Authentication Works
+
+Skala’s **Basic Authentication** follows a simple structure:
+
+### **Step 1: Construct the Basic Auth String**
+
+Basic Auth credentials are formatted as:
+
+```
+username:password
+```
+
+Since Skala **does not use passwords**, the format is:
+
+```
+{{ApiKey}}:
+```
+
+For example, if your **Live API Key** is:
+
+```
+live_SkalaRocks
+```
+
+Then the string will be:
+
+```
+live_SkalaRocks:
+```
+
+---
+
+### **Step 2: Encode the String in Base64**
+
+Most programming languages provide **Base64 encoding** functions. Encoding the **`live_SkalaRocks:`** string gives:
+
+```
+bGl2ZV9TY2FsZVJvY2tzOg==
+```
+
+---
+
+### **Step 3: Set the Authorization Header**
+
+The final `Authorization` header should be:
+
+```
+Authorization: Basic bGl2ZV9TY2FsZVJvY2tzOg==
+```
+
+---
+
+### **Example Request Using cURL**
+
+```sh
+curl -X GET "https://api.skala.xyz/v1/projects" \
+  -H "Authorization: Basic bGl2ZV9TY2FsZVJvY2tzOg==" \
+  -H "Content-Type: application/json"
+```
+
+> **Note:** If you're using Postman or API testing tools, the `Authorization` header will automatically encode your API key.
+
+---
+
+## Best Practices for API Authentication
+
+- **Keep API Keys Secure**: Never expose your API keys in public repositories or frontend applications.
+- **Use Environment Variables**: Store API keys in environment variables instead of hardcoding them in scripts.
+- **Regenerate API Keys If Compromised**: If you suspect unauthorized access, generate a new API key from the dashboard.
+- **Use Test Mode for Development**: Avoid using live keys in development to prevent accidental charges.
+
+---
+
+## Summary
+
+| **Feature**               | **Details**                                                  |
+| ------------------------- | ------------------------------------------------------------ |
+| **Authentication Method** | HTTP Basic Authentication (API Key as username, no password) |
+| **Test vs Live Mode**     | Test mode returns mock responses, live mode incurs charges   |
+| **API Key Location**      | Available in Skala Dashboard → Profile → API Keys            |
+| **Callback Verification** | Uses `scale-callback-auth` header                            |
+| **Base64 Encoding**       | Required for sending `Authorization: Basic` header           |
+
+For additional support, visit our **[API Documentation](https://api.skala.xyz/docs)** or contact **support@skala.xyz**.

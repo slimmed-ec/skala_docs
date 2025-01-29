@@ -3,6 +3,6 @@ const meta = {
   start: "Getting Started",
   "multi-stage-task": "Multi-Stage Task",
   "multi-stage-ref": "Multi-Stage Reference",
-  "sensor-fusion-task": "Multi-Fusion Task",
+  "sensor-fusion-task": "Sensor-Fusion Task",
 };
 export default meta;

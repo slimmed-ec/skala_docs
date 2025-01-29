@@ -2,9 +2,22 @@ import { Table, Callout } from "nextra/components";
 
 # API Errors
 
+## Overview
+
+When interacting with the Skala API, errors may occur due to **invalid requests**, **missing parameters**, or **server issues**. The API responds with **standard HTTP error codes**, along with a **detailed JSON error message** to help diagnose the issue.
+
+- **Client Errors (4xx)**: Issues caused by incorrect requests (e.g., missing parameters, invalid authentication).
+- **Server Errors (5xx)**: Issues caused by Skala’s servers.
+
+---
+
 ## Attachment Processing Errors
 
-In the event of one or more task attachments having invalid data, the task callback will be invoked with an error response detailing the problems, and the task's status will be set to error. Additional detail about the error and failed attachments will be stored in the task response.
+If one or more **task attachments** contain invalid data, the **task callback** will be triggered with an **error response**, and the **task's status** will be set to `"error"`. Additional details about the failure will be stored in the **task response**.
+
+---
+
+## **Common API Error Codes**
 
 <div style={{ marginTop: "1.5rem" }}>
   <Table>
@@ -17,65 +30,68 @@ In the event of one or more task attachments having invalid data, the task callb
     <tbody>
       <Table.Tr>
         <Table.Td>200</Table.Td>
-        <Table.Td>OK -- Everything worked as expected.</Table.Td>
+        <Table.Td>OK — Everything worked as expected.</Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>400</Table.Td>
         <Table.Td>
-          Bad Request -- The request was unacceptable, often due to missing a
-          required parameter.
+          Bad Request — The request was **unacceptable**, often due to missing a
+          **required parameter**.
         </Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>401</Table.Td>
-        <Table.Td>Unauthorized -- No valid API key provided.</Table.Td>
+        <Table.Td>Unauthorized — No valid API key provided.</Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>402</Table.Td>
         <Table.Td>
-          Not enabled -- Please contact sales@skalaapi.com before creating this
-          type of task.
+          Not Enabled — Please contact **sales@skalaapi.com** before creating
+          this type of task.
         </Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>404</Table.Td>
-        <Table.Td>Not Found -- The requested resource doesn't exist.</Table.Td>
+        <Table.Td>
+          Not Found — The requested resource **does not exist**.
+        </Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>409</Table.Td>
         <Table.Td>
-          Conflict -- The provided idempotency key or unique_id is already in
-          use for a different request.
+          Conflict — The provided **idempotency key** or **unique_id** is
+          already in use for a different request.
         </Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>429</Table.Td>
         <Table.Td>
-          Too Many Requests -- Too many requests hit the API too quickly.
+          Too Many Requests — API rate limit exceeded. Slow down request rate.
         </Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>500</Table.Td>
         <Table.Td>
-          Internal Server Error -- We had a problem with our server. Try again
-          later.
+          Internal Server Error — Skala had a server issue. Try again later.
         </Table.Td>
       </Table.Tr>
     </tbody>
   </Table>
 </div>
 
-## Example Error Formats
+---
 
-These examples help you understand the structure and content of error messages returned by the API in different situations.
+## **Example API Error Formats**
 
-**"Please include an attachment or attachments parameter":**
+Below are examples of **error responses** returned by the Skala API:
 
-This error occurs when you make a request to the API without including any attachment or attachments parameter. It indicates that you need to provide either a single attachment or an array of attachments in your API request for it to be processed successfully.
+---
 
-This error occurs when you make a request to the API without including any attachment or attachments parameter. It indicates that you need to provide either a single attachment or an array of attachments in your API request for it to be processed successfully.
+### **Missing Attachment Parameter**
 
-#### 400 Bad Request
+📌 **Cause:** The request **did not include** an `attachment` or `attachments` parameter.
+
+#### **400 Bad Request**
 
 ```json filename="JSON"
 {
@@ -84,41 +100,101 @@ This error occurs when you make a request to the API without including any attac
 }
 ```
 
-**"One or more attachments could not be downloaded":**
+🔹 **Solution:**
 
-This error message indicates that there was an issue with downloading one or more attachments specified in your API request. It suggests that there might be connectivity issues or problems with the specified attachment URLs. You may need to ensure that the attachment URLs are valid and accessible for the Skala API to download and process them.
+- Ensure that **at least one attachment** is provided in the API request.
+- Attachments should be included as a **valid URL** or a **list of URLs**.
+
+---
+
+### **Attachment Download Failed**
+
+📌 **Cause:** Skala **could not download** one or more attachments from the provided URLs.
+
+#### **Example Response**
 
 ```json filename="JSON"
-// example task.response with failed attachment due to access issues
 {
-  "error": "One or more attachments could not be downloaded.", // reason for error
+  "error": "One or more attachments could not be downloaded.",
   "attachments": [
     {
-      "statusCode": 403, // HTTP code received when fetching attachment
-      "url": "http://example.com/kitten.png" // attachment URL
+      "statusCode": 403,
+      "url": "http://example.com/kitten.png"
     }
   ]
 }
 ```
 
-**"One or more attachments could not be downloaded (specific attachment errors)":**
+🔹 **Solution:**
 
-This error is similar to the previous one but provides more specific information about the attachments that couldn't be downloaded. It might include additional details such as the URLs or identifiers of the problematic attachments. This information helps you identify and troubleshoot the specific attachments that failed to download.
+- Ensure the **attachment URLs** are **publicly accessible** or use **authenticated result URLs**.
+- Check for **broken links** or **expired URLs**.
+
+---
+
+### **Invalid Attachment Format**
+
+📌 **Cause:** The attachment **could not be processed** due to **formatting issues**.
+
+#### **Example Response**
 
 ```json filename="JSON"
-// example task.response with failed attachment processing
 {
-  "error": "One or more attachments could not be downloaded.", // reason for error
+  "error": "One or more attachments could not be downloaded.",
   "frames": [
-    // frames which failed processing
     {
-      "frame": 10, // frame #
+      "frame": 10,
       "message": "Invalid JSON Format: Unexpected end of JSON input",
       "attachment": {
-        "statusCode": 200, // HTTP code received when fetching attachment
-        "url": "http://example.com/lidar/frame10.json" // attachment URL
+        "statusCode": 200,
+        "url": "http://example.com/lidar/frame10.json"
       }
     }
   ]
 }
 ```
+
+🔹 **Solution:**
+
+- Validate the JSON structure **before uploading**.
+- Ensure all required fields are **correctly formatted**.
+
+---
+
+## **Best Practices for Handling API Errors**
+
+✔ **Implement Retry Logic**
+
+- For **5xx errors (server issues)**, implement **exponential backoff** before retrying.
+- Avoid retrying **4xx errors**, as they indicate **client-side issues**.
+
+✔ **Log API Responses**
+
+- Capture and **log error responses** to help diagnose issues.
+
+✔ **Handle Missing Attachments Gracefully**
+
+- If **attachments fail**, retry with **valid URLs** or **fall back to alternative data**.
+
+✔ **Monitor API Rate Limits**
+
+- Avoid excessive requests to **prevent 429 errors** (Too Many Requests).
+- Use **pagination** when retrieving large amounts of data.
+
+✔ **Secure API Keys**
+
+- Never expose API keys **in public repositories**.
+- Rotate API keys **if compromised**.
+
+---
+
+## **Summary**
+
+| **Feature**                | **Details**                                                           |
+| -------------------------- | --------------------------------------------------------------------- |
+| **Common API Errors**      | **400** (Bad Request), **401** (Unauthorized), **500** (Server Error) |
+| **Error Responses Format** | JSON responses with `status_code` and `error` message                 |
+| **Attachment Errors**      | Failed downloads, incorrect formats, missing parameters               |
+| **Best Practices**         | Implement retries, log errors, handle missing attachments             |
+
+For more details, visit our **[API Documentation](https://api.skala.xyz/docs)** or contact **support@skala.xyz**.

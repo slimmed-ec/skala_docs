@@ -1,0 +1,220 @@
+import { Table } from "nextra/components";
+
+# **Create a Video Playback Annotation Task**
+
+This API endpoint allows you to create a **videoplaybackannotation** task,  
+where Skala AI annotators will **view video files and draw annotations**  
+on objects in **MP4, WebM, or OGG video formats.**
+
+## **Key Features**
+
+✅ Supports **precise frame-by-frame object annotation**.  
+✅ Allows **pre-labeled data (base_annotations)** for refinement.  
+✅ Enables **event-based annotation** in video segments.  
+✅ Supports **custom annotation links** between objects.  
+✅ Flexible **padding options** for extending frame annotations.  
+✅ Allows **selecting a specific video segment** for annotation.
+
+---
+
+## **Request Parameters**
+
+### **Body Parameters**
+
+Below is a breakdown of the parameters you can use when creating a video playback annotation task.
+
+<div style={{ marginTop: "1.5rem" }}>
+  <Table>
+    <thead>
+      <Table.Tr>
+        <Table.Th>Parameter</Table.Th>
+        <Table.Th>Type</Table.Th>
+        <Table.Th>Description</Table.Th>
+      </Table.Tr>
+    </thead>
+    <tbody>
+      <Table.Tr>
+        <Table.Td>project</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>The **project name** to associate this task with.</Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>batch</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          The **batch name** associated with this task (optional).
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>instruction</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          A **markdown-enabled string** or **Google Doc link** with instructions
+          for annotators.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>callback_url</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          The **URL (http:// or https://) or email address** where the task
+          results will be sent upon completion.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>attachment</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          ✅ **(Required if using video format)** The **URL pointing to the
+          video file attachment** (supported formats: **mp4, webm, ogg**).
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>attachments</Table.Td>
+        <Table.Td>array of strings</Table.Td>
+        <Table.Td>
+          ✅ **(Required if using images instead of video)** A list of **frame
+          image URLs** for annotation.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>attachment_type</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>
+          Either **"image"** (for frame images) or **"video"** (for video
+          files).
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>geometries</Table.Td>
+        <Table.Td>object</Table.Td>
+        <Table.Td>
+          ✅ **(Required)** Defines the objects to annotate (e.g., box, polygon,
+          line, etc.).
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>events_to_annotate</Table.Td>
+        <Table.Td>array of strings</Table.Td>
+        <Table.Td>List of **events to annotate** in the video.</Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>duration_time</Table.Td>
+        <Table.Td>array of strings</Table.Td>
+        <Table.Td>
+          The duration (in seconds) of the video to be annotated. **Ignored if
+          `attachment_type` is "image".** Default: **full video length**.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>frame_rate</Table.Td>
+        <Table.Td>object</Table.Td>
+        <Table.Td>
+          Number of frames per second to annotate. Default: **1 FPS**.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>start_time</Table.Td>
+        <Table.Td>int32</Table.Td>
+        <Table.Td>
+          The **start time (in seconds)** for annotation. **Ignored if
+          `attachment_type` is "image".**
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>padding</Table.Td>
+        <Table.Td>int32</Table.Td>
+        <Table.Td>
+          Padding (in pixels) added **to all sides** of each frame.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>base_annotations</Table.Td>
+        <Table.Td>object</Table.Td>
+        <Table.Td>
+          Pre-labeled annotations that can be edited, locked, or extended.
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>metadata</Table.Td>
+        <Table.Td>object</Table.Td>
+        <Table.Td>Additional **key-value metadata** (max **10KB**).</Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>priority</Table.Td>
+        <Table.Td>int32</Table.Td>
+        <Table.Td>
+          Task priority (**10 = low, 20 = medium, 30 = high**).
+        </Table.Td>
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td>unique_id</Table.Td>
+        <Table.Td>string</Table.Td>
+        <Table.Td>A **unique identifier** for the task.</Table.Td>
+      </Table.Tr>
+    </tbody>
+  </Table>
+</div>
+
+---
+
+## **Example Request**
+
+Here's an example **videoplaybackannotation** task request:
+
+```json filename="videoplaybackannotation.json"
+{
+  "project": "road_safety",
+  "callback_url": "http://www.example.com/callback",
+  "attachment": "https://example.com/sample_video.mp4",
+  "attachment_type": "video",
+  "frame_rate": 5,
+  "start_time": 10,
+  "duration_time": [30],
+  "geometries": {
+    "box": {
+      "objects_to_annotate": ["car", "pedestrian", "traffic_light"]
+    }
+  },
+  "events_to_annotate": ["near_collision", "red_light_violation"],
+  "metadata": {
+    "dataset": "City Traffic",
+    "annotator_id": "98765"
+  },
+  "unique_id": "task_video_002",
+  "tags": ["urban", "night"]
+}
+```
+
+---
+
+## **Expected Response**
+
+If successful, you will receive a **task_id** in the response:
+
+```json filename="response.json"
+{
+  "task_id": "abc123",
+  "status": "pending",
+  "created_at": "2024-01-29T15:30:00Z",
+  "attachment": "https://example.com/sample_video.mp4",
+  "frame_rate": 5,
+  "geometries": {
+    "box": {
+      "objects_to_annotate": ["car", "pedestrian", "traffic_light"]
+    }
+  }
+}
+```
+
+---
+
+## **Final Thoughts**
+
+This API enables **detailed object tracking and event detection**  
+in video playback annotation tasks. 🚀
+
+By supporting **custom metadata, flexible segment selection, and annotation refinement**,  
+this workflow ensures **scalability and accuracy** for AI-powered projects.
+
+For **enterprise solutions or bulk processing**, reach out to Skala Support.

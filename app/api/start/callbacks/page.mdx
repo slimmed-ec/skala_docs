@@ -2,13 +2,22 @@ import { Table } from "nextra/components";
 
 # Callbacks
 
-On your tasks, you can optionally supply a callback_url, a fully qualified URL that we will POST with the results of the task when completed. The data will be served as a JSON body (application/json). Alternately, you can set a default callback URL in your profile, which will be used for tasks that do not specify one.
+## Overview
 
-Additionally, in order to simplify testing and add support for email automation pipelines, you may provide an email address as the callback_url. In this case, each completed task will result in an email sent from hello@skala.xyz with the body as the task's JSON payload.
+Skala allows you to **receive real-time updates** about task status changes by specifying a **callback URL**. When a task is completed, Skala will send a **POST request** to the specified callback URL with the task details in JSON format.
 
-You should respond to the POST request with a 2xx status code. If we do not receive a 2xx status code, we will continue to retry up to 20 times over the course of the next 24 hours.
+### **How Callbacks Work**
 
-If we receive a 2xx status code, the task will be populated with a true value for the callback_succeeded parameter. Otherwise, if we do not receive a 2xx status code on any retry, the task will be populated with a false value for the callback_succeeded parameter.
+- When creating a task, you can include a `callback_url` parameter.
+- Once the task is completed, Skala will **POST** the task's result to the `callback_url`.
+- If no callback URL is provided in the request, Skala will use the **default callback URL** from your account settings.
+- You can also provide an **email address** as the `callback_url`, in which case Skala will send the task result via email from **hello@skala.xyz**.
+
+---
+
+## Callback Request Format
+
+Skala sends task updates in the following **JSON format**:
 
 ```json filename="JSON"
 {
@@ -39,25 +48,63 @@ If we receive a 2xx status code, the task will be populated with a true value fo
 
 ---
 
-## Getting Started
+## Callback Response Handling
 
-If you're just testing and want to try a few requests, the easiest way to get started is to use a RequestBin and send requests using the provided URL as the callback_url. You can also use ngrok to expose a local server to the internet for fast prototyping.
+To acknowledge receipt of a callback, your server should **return a 2xx HTTP status code** (e.g., `200 OK`).
 
-We've also found Pipedream to be an easy-to-use platform to receive webhooks, view logs, take other actions.
+| **Scenario**         | **Action Taken by Skala**                |
+| -------------------- | ---------------------------------------- |
+| **Receives 2xx**     | No further retries                       |
+| **Receives non-2xx** | Retries up to **20 times** over 24 hours |
 
-#### Authentication
+If Skala **never receives a 2xx response**, the task will be marked with:
 
-If you'd like to authenticate our callbacks, we set a skala-callback-auth HTTP header on each of our callbacks. The value will be equal to your Live Callback Auth Key shown on your dashboard. If this header is not set, or it is set incorrectly, the callback is not from Skala.
+```json
+"callback_succeeded": false
+```
 
-#### Events that trigger a Callback
+If a **2xx response is received**, the callback is considered successful:
 
-Callbacks are sent for the following events:
+```json
+"callback_succeeded": true
+```
 
-- Error on Task Creation (see Errors for more details)
-- Task Completion
-- Audit Status Changes (Approved, Rejected, Fixed)
+---
 
-Tasks that are "Recalled" by Skala, meaning an operation on Skala's side converts completed tasks back to pending so they can have follow-on work done on them. This conversion is coordinated and communicated with you as the customer if it needs to happen.
+## Getting Started with Callbacks
+
+If you're **testing** and want to experiment with callback requests, here are some easy ways to get started:
+
+- **[RequestBin](https://requestbin.com/)** – Quickly create a test URL to capture webhook events.
+- **[Ngrok](https://ngrok.com/)** – Expose a local server to the internet for testing callbacks.
+- **[Pipedream](https://pipedream.com/)** – Set up a callback listener and automate responses.
+
+---
+
+## Callback Authentication
+
+To **verify that a callback is from Skala**, each callback request includes an **`skala-callback-auth`** header.
+
+### **Verifying a Callback**
+
+1. Extract the value from the `skala-callback-auth` header.
+2. Compare it with your **Live Callback Auth Key** (available in your dashboard).
+3. If the values **do not match**, discard the request.
+
+---
+
+## Events That Trigger a Callback
+
+| **Event**                  | **Description**                                                |
+| -------------------------- | -------------------------------------------------------------- |
+| **Task Completed**         | A task has been successfully completed.                        |
+| **Error on Task Creation** | A task failed to be created due to validation errors.          |
+| **Audit Status Changed**   | A completed task was **Approved, Rejected, or Fixed**.         |
+| **Task Recalled**          | A task was moved from **Completed** to **Pending** for review. |
+
+---
+
+## Callback Payload Structure
 
 <div style={{ marginTop: "1.5rem" }}>
   <Table>
@@ -73,48 +120,44 @@ Tasks that are "Recalled" by Skala, meaning an operation on Skala's side convert
         <Table.Td>task_id</Table.Td>
         <Table.Td>string</Table.Td>
         <Table.Td>
-          The task_id is the unique identifier for the task. It is identical to
-          task.task_id.
+          The unique identifier for the task. Matches <code>task.task_id</code>.
         </Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>status</Table.Td>
         <Table.Td>string</Table.Td>
         <Table.Td>
-          The status of the task when it was completed. Normally{" "}
-          <code>completed</code>, but can also be <code>error</code> in the case
-          that a task failed to process. It is identical to task.status.
+          The status of the task upon completion. Typically{" "}
+          <code>completed</code>, but may be <code>error</code> if it failed.
         </Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>response</Table.Td>
         <Table.Td>object</Table.Td>
-        <Table.Td>
-          The response object of the completed request. It is identical to
-          task.response.
-        </Table.Td>
+        <Table.Td>The response object containing the task results.</Table.Td>
       </Table.Tr>
       <Table.Tr>
         <Table.Td>task</Table.Td>
         <Table.Td>object</Table.Td>
-        <Table.Td>The full Task Object for reference and convenience.</Table.Td>
+        <Table.Td>The full Task Object for reference.</Table.Td>
       </Table.Tr>
     </tbody>
   </Table>
 </div>
 
+---
+
 ## Re-sending a Callback
 
-This endpoint re-sends a callback for a completed or errored task to the callback_url.If your callback server had gone down, or otherwise missed receiving a task, this endpoint will tell Skala to resend the callback's original data (above) to your server.
+If your server **missed a callback** due to downtime or another issue, you can request Skala to **re-send** the original callback.
 
-#### Installation
+### **Endpoint**
 
-```bash filename="bash"
-$ python -m pip install requests
----
+```sh
+POST https://api.skala.xyz/v1/task/{task_id}/send-callback
 ```
 
-#### Example Usage
+### **Example Request (Python)**
 
 ```python filename="Python"
 
@@ -127,5 +170,28 @@ headers = {"accept": "application/json"}
 response = requests.post(url, headers=headers)
 
 print(response.text)
-
 ```
+
+---
+
+## Best Practices for Handling Callbacks
+
+- **Use a Secure Endpoint** – Always use HTTPS for callback URLs.
+- **Verify Authenticity** – Check the `skala-callback-auth` header.
+- **Implement Logging** – Log incoming requests to troubleshoot issues.
+- **Handle Retries** – Expect duplicate requests and ensure they do not trigger duplicate actions.
+- **Keep Callback Processing Fast** – If needed, process callbacks asynchronously to avoid delays.
+
+---
+
+## Summary
+
+| **Feature**                       | **Details**                                                    |
+| --------------------------------- | -------------------------------------------------------------- |
+| **Callback Mechanism**            | Skala sends POST requests to the `callback_url`.               |
+| **Authentication**                | Uses `skala-callback-auth` header for verification.            |
+| **Response Handling**             | Must return `2xx` to confirm receipt; otherwise retries occur. |
+| **Events that Trigger Callbacks** | Task completion, errors, audits, recalls.                      |
+| **Re-sending Callbacks**          | API endpoint available to re-trigger missed callbacks.         |
+
+For additional support, visit our **[API Documentation](https://api.skala.xyz/docs)** or contact **support@skala.xyz**.
