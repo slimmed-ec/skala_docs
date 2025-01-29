@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Hr from "../components/ui/hr";
+import Image from "next/image";
 
 const items = [
   {
@@ -79,7 +80,9 @@ export default function IndexPage() {
             </div>
           </div>
           <div>
-            <img
+            <Image
+              width={717}
+              height={702}
               src="/k4fnk4f.webp"
               alt="knowledge-base"
               className="grayscale hover:grayscale-0 transition-all duration-300"
