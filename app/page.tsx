@@ -54,8 +54,10 @@ export default function IndexPage() {
       <div className="bg-black overflow-hidden">
         <div className="container max-w-(--nextra-content-width) px-5 xl:-px-0 grid items-start lg:grid-cols-2 mx-auto pt-[152px] gap-10 lg:gap-[145px] text-center lg:text-left">
           <div className="t-5">
-            <h1 className="pb-4 text-5xl font-semibold leading-tight lg:text-8xl text-w-800 sm:break-normal">
-              Getting Started with SKALA AI
+            <h1 className="pb-4 text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-semibold leading-tight text-w-700 sm:break-normal">
+              Getting Started
+              <br />
+              with SKALA AI
             </h1>
             <p className="pt-4 pb-8 text-base font-normal text-w-100 lg:text-xl max-w-xl mx-auto lg:mx-0">
               Skala AI transforms raw data into high-quality training datasets,
