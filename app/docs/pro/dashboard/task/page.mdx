@@ -1,0 +1,121 @@
+# Tasks Tab
+
+### Overview
+
+The **Tasks** tab allows you to view a more granular list of your submitted tasks, filterable by **status, project, and batch**.
+
+## Task Filters
+
+You can search through your tasks using the following filters:
+
+#
+
+![Deskripsi gambar](/img/dashboard-pro-task.webp)
+
+#
+
+import { AlertTriangle } from "lucide-react";
+
+> <AlertTriangle className="text-yellow-500" /> It is possible your task filters
+> will hide all tasks. Please check your task filters carefully!
+
+### 1. Creation Date Range
+
+- Select the task completion or creation date range.
+
+> **Note:** You are able to select **UTC Time, Pacific Time, or Local Time**.
+
+### 2. Task Status
+
+You can also filter based on the task status. Here are the following status options:
+
+- **Completed** - Tasks that have been completed by our taskers.
+- **In Progress** - Tasks that are being worked on by our taskers.
+- **Queued** - Tasks that have not been worked on yet.
+- **Error** - Tasks that have errors.
+- **Canceled** - Tasks that have been cancelled by our customers.
+- **Redo** - Tasks that have been re-done by Skala.
+
+### 3. Audit Status
+
+Filter based on the customer audit status:
+
+- **Ready to Audit** - Tasks that have not been audited yet.
+- **Accepted**
+- **Fixed**
+- **Rejected**
+
+### In Progress vs. Queued
+
+> You can only **cancel** tasks that are **Queued**.
+>
+> Once the status of a task has moved into **In Progress**, that means the task is already being worked on and can no longer be canceled.
+
+For further information, please reach out to **[support@skala.xyz](mailto:support@skala.xyz)**.
+
+## Exporting JSON
+
+There are two ways to export JSON:
+
+### 1. Export JSON for all Tasks
+
+#
+
+![Deskripsi gambar](/img/export-tasks.webp)
+
+#
+
+- Click on the **Export** button at the top of the Tasks page.
+  **Note:** There is a **1,000 task limit**. If you want to download more, please use our **API** instead.
+
+### 2. Export JSON for Each Task Individually
+
+#
+
+![Deskripsi gambar](/img/task-download.webp)
+
+#
+
+- Click on each task and then click on the **Download JSON** button.
+  You can also see a preview of the JSON directly from this view.
+
+## Task Details
+
+### 1. Task Preview
+
+- To preview the media asset file, click into the task and hover over the image tile.
+- **Note:** You can only preview the original image for pending tasks and annotated images for completed tasks.
+- For **3D tasks**, you can preview the point cloud file by clicking on **"Debug Task"** or **"Audit Task"** (only for completed tasks).
+
+### 2. Documentation & Instructions
+
+- To view the documentation and instructions for the task, click into the task and navigate to the **"Instructions"** or **"Documentation"** button.
+
+### 3. JSON
+
+- To view the JSON file for each task individually, click into the task and navigate to the **"Download JSON"** button. **Note:** This will only return the JSON file for the original task upload.
+- You can also export all JSON for all tasks using the **"Export JSON"** button.
+
+#
+
+> <AlertTriangle className="text-yellow-500" /> **Note**: this will only export 1000
+> tasks. If you want to export more, you must use the task API endpoint.
+
+## Audit Tasks
+
+To audit tasks, click on an individual task and then click the **"Audit Tasks"** button. In this view you can:
+
+- **Accept** - Signals that we have completed the task to your quality standards.
+- **Fix** - If you want to make an immediate update to your callback response, you can fix tasks directly. Previous responses will be saved in the **prior_response** field of the callback body, and the **response** field will be updated with the new response.
+- **Reject** - Signals that we have not met your quality standards.
+
+To learn more about this workflow, please see our **[best practices here](#)**.
+
+## Cancel Tasks
+
+- You can only cancel tasks via the **API** - learn more about this endpoint **[here](#)**.
+- You can only cancel tasks that are **Queued**.
+- **Do not cancel tasks that are In Progress.** These tasks are already being worked on. Cancelling them may result in charges to compensate for the existing work.
+
+> <AlertTriangle className="text-yellow-500" /> **Note:** Completed tasks cannot
+> be cancelled.

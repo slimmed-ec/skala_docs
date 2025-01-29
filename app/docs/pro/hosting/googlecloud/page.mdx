@@ -1,0 +1,41 @@
+# Google Cloud Storage
+
+## Google Cloud Storage Access
+
+If you use Google Cloud Storage to store data, and you submit tasks with attachments as `gs:` protocol URIs, rather than `http:` or `https:`, we will use the Google Cloud Storage API to fetch your data. For example, instead of sending `https://storage.googleapis.com/bucket/key`, you would send `gs://bucket/key`.
+
+We can either fetch your data using Service Account Impersonation (preferred, more secure) or Cross-project Access.
+
+## Service Account Impersonation
+
+To access Cloud Storage data in your GCP project, Skala can impersonate a service account within that project, which has permission to access data in Cloud Storage.
+
+### To set up Service Account Impersonation:
+
+1. As a team admin or manager, go to [dashboard.skala.xyz/settings/integrations](https://dashboard.skala.xyz/settings/integrations).
+2. In another window, navigate to the GCP Service Accounts page for the appropriate project.
+3. Create a service account.
+   - The service account ID must contain an 8-character user identifier as a substring, this identifier can be found in the Google Cloud Platform section of the Integrations Settings page.
+   - We suggest the ID `skalaai-integrations-{uid}`.
+4. Grant Skala's service account the ability to impersonate the newly created service account.
+   - In the Service Accounts page on GCP, check the box associated with the newly created service account.
+   - In the permissions pane on the right, click `Add Member` (you may need to click "Show Info Panel" in the top right to see this option).
+   - Specify `backend-bucket-access@attachment-storage-243718.iam.gserviceaccount.com` as the member, and `Service Account Token Creator` as the role.
+   - Save the permissions.
+5. In Google Cloud Storage, assign the `Storage Legacy Bucket Reader` or `Storage Bucket Data Reader` permissions for the requisite buckets to the newly created service account.
+   - If you use fine-grained access controls, add the service account email as a Reader for any objects you would like to upload (if not already granted by bucket-level access).
+6. Return to the Skala Dashboard and enter the email of the service account.
+
+#
+
+![Deskripsi gambar](/img/21eec7b-Screen_Shot_2020-06-11_at_2.webp)
+
+#
+
+**Note**: If you enable the GCP integration for your account, we will not attempt to fetch attachments from the default service account (`backend-bucket-access@attachment-storage-243718.iam.gserviceaccount.com`) directly; the policies described in GCP IAM Access will not work.
+
+## Cross-project Access
+
+If Service Account Impersonation is not configured, we will directly fetch attachments from your GCS bucket, using the GCP service account `backend-bucket-access@attachment-storage-243718.iam.gserviceaccount.com`. You can grant access to this service account on a per-object basis with ACLs, or on a per-bucket basis with Cloud IAM Permissions.
+
+Please note that this authentication mechanism suffers from the confused deputy problem — a third party that can guess your Cloud Storage URLs will be able to submit tasks with your data.

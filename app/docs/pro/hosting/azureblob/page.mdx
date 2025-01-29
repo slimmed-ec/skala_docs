@@ -1,0 +1,38 @@
+# Azure Blob Storage
+
+## Azure Blob Storage Access
+
+If you use Azure Blob Storage, you can grant access to your Blob Storage resources by completing the Azure access delegation process. Skala has registered the Skala AI application as an Azure multi-tenant application that can access resources in your Azure subscription on your behalf.
+
+After completing the access delegation process, blob storage resource URIs (i.e., of the form `https://{storageaccount}.blob.core.windows.net/{container}/{key}`) will be fetched using the Skala AI service principal, and you will be able to submit blob URIs to the API that are not publicly accessible.
+
+The process involves the following steps:
+
+1. Consenting to grant Skala AI the permissions it requires to access resources in your subscription.
+2. Assigning the Skala AI app an appropriate role.
+
+## Application Consent
+
+As an administrator or manager of your Skala AI team, go to the integrations tab in the settings page, and click the `Connect to Azure` button. Azure displays the resource permissions requested by the application.
+
+#
+
+![Deskripsi gambar](/img/4422947-Screen_Shot_2020-06-11_at_2.webp)
+
+#
+
+Click `Accept` to allow Azure to grant permission to Skala AI to access resources in your subscription. You will still need to grant the application a role to access Blob Storage data.
+
+**Note**: After providing application consent, the Skala AI app will stop using anonymous credentials to fetch attachments sent in by your team.
+
+## Role-Based Access
+
+As part of the access delegation process, you must assign a role to the Skala AI application service principal to read data from your storage accounts. We recommend assigning the `Storage Blob Data Reader` role for the particular storage accounts or containers to retrieve data from. Alternatively, you can create a custom role that provides only the minimum permissions necessary.
+
+See the [Azure docs](https://docs.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-permissions) for instructions on how to assign the role.
+
+## Disconnecting from Azure
+
+To stop the Skala AI service principal from authenticating via Azure AD to access your user's storage accounts, use the `Unlink from Azure` button in the integrations tab in the settings page.
+
+**Note**: This does not revoke permissions from the Skala AI service principal in Azure, nor does it uninstall the Skala AI app from your subscription; those must be done using the Azure portal or the Azure CLI.

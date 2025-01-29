@@ -1,0 +1,19 @@
+# Downloading Data
+
+To retrieve your data from Skala, navigate to the **"Deliveries"** tab in the dashboard, or use the **Skala API**.
+
+Once you have selected your preferred method and found the Skala tasks you want to download, review the **callback format** to understand the meaning of each response field. Each task type has its own callback format. For example, the response format for **Image Annotation with Polygons** or **2D segmentation** is different.
+
+### Option 1: Skala API - Listing Multiple Tasks
+
+Our **API docs** provide support for listing multiple tasks.
+
+### Option 2: Python SDK
+
+If you're working with **Python**, we highly recommend leveraging our **Python SDK**.
+
+The specific function used with the Python SDK is the **"List Tasks"** function.
+
+### Option 3: Sail SDK
+
+**Sail** is a data pipeline starter kit. The `task_download.py` script in the **Sail SDK** can be used for downloading all tasks from a project.

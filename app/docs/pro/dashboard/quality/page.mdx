@@ -1,0 +1,100 @@
+# Quality Tab
+
+## Overview
+
+The **Quality** tab allows you to audit a random sample of tasks for quality and view stats for tasks you’ve audited.
+
+#
+
+![Deskripsi gambar](/img/quality-1.webp)
+
+#
+
+> ##### ✅ **Why should you audit tasks?**
+>
+> Auditing tasks allows you to provide feedback directly to our taskers. This will help us identify common errors or clarify edge cases.
+
+##### Auditing Workflow
+
+There are three ways to audit tasks:
+
+- **Audit completed tasks individually**
+- **Audit all completed tasks within a date range**
+- **Audit all tasks completed across a specific week**
+
+##### How to audit completed tasks individually:
+
+1. In the **Tasks** tab, filter on the **Completed** tasks.
+2. Search for the task that you want to audit and click on **"Audit Task"**.
+
+#
+
+![Deskripsi gambar](/img/audit-task-11.webp)
+
+#
+
+##### How to audit all completed tasks within a date range:
+
+1. In the **Quality** tab, select the specified task date range, audit, or batch status.
+2. Click on the **"Audit Tasks"** button - this will allow you to audit a random sample of tasks.
+
+#
+
+![Deskripsi gambar](/img/audit-audit.webp)
+
+#
+
+##### Audit all tasks completed across a week:
+
+1. In the **Quality** tab, go to the **"Tasks completed last week"** tab under **"Report"**.
+2. Select **Audit** for the desired week.
+
+#
+
+![Deskripsi gambar](/img/quality-single.webp)
+
+#
+
+> ✅ **Auditing Tasks**
+>
+> If multiple team members are auditing at the same time, we will **lock** each task so that only one person can audit a task at a time. This prevents conflicted copies.
+
+##### Audit Feedback
+
+Within the audit workflow, you are able to make the following selections:
+
+- **Approve** - Mark that tasks have been completed according to instructions.
+- **Make Changes** - Fix tasks that have minor or non-critical errors and update your callback response immediately.
+- **Reject** - Signal that tasks were completed incorrectly. Please provide detailed comments on how our team can improve.
+
+> ✅ **Reject vs. Make Changes**
+>
+> - Both **Reject** and **Make Changes** will provide feedback to the Skala team about the quality of your tasks.
+> - For quick or minor changes, please **Make Changes** as you will get an updated callback response right away. In addition, not all rejected tasks will be resubmitted. Please contact your engagement manager if you want to discuss re-dos
+> - For critical and more structural misunderstanding of the instructions, please **Reject** the task and provide detailed feedback! This will help our taskers to improve.
+
+## Audit Reports
+
+The **quality assurance dashboard** displays total reviews, accepts, and rejects using filtered tasks. Additional reports include:
+
+- **Tasks completed last week** - Audit tasks aggregated by completion date (Monday 00:00 to Sunday 23:59 PST, last 4 weeks).
+- **Task Level Report** - List of tasks with auditor and completion time.
+- **Auditor Tracker** - Audit report for tasks in batches.
+- **Auditor Quality** - Summary of reviews, accepts, and rejects per auditor.
+
+> **Note:** The **Auditor Tracker** is available only if you use batches.
+
+## Callback Body
+
+When an audit is submitted, the callback body will include:
+
+- **customer_review_status**: "Accepted", "Rejected", or "Fixed".
+- **customer_review_comments**: Comments left during the audit.
+- **prior_responses**: Previous responses before the audit.
+
+If a task is fixed through multiple audits:
+
+- **response**: Updated with the most recent audit.
+- **customer_review_status**: Reflects the most recent audit.
+- **customer_review_comments**: Appends new comments.
+- **prior_responses**: Appends previous responses.

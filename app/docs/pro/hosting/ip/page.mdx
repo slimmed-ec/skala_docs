@@ -1,0 +1,30 @@
+# IP Allowlisting
+
+## Expanded Public IP Addresses - Action Requested by April 1, 2023
+
+We are expanding our public IPs from which we may fetch resources or issue callback requests.
+
+**Action is required** to prevent disruption if you use Skala's API to send attachments or receive callbacks AND have implemented allow-listed public IP addresses for Skala AI services in your network firewall egress policies.
+
+By **April 1, 2023**, please ensure your firewall allows access from the additional IPs highlighted below:
+
+- `18.246.77.0/27`
+- `2602:fb33::/45`
+
+## IP Allowlisting
+
+For non-AWS customers\*, Skala uses a consistent set of IP addresses to fetch data and send callbacks, allowing for IP allowlisting of attachments sent to us, as well as for callback endpoints, to increase data security.
+
+If you are enabling IP allowlisting, we request that you whitelist access to your data to all 7 listed IP addresses below, and we will only fetch content using these IP addresses. In this way, you can secure your content from the public while still allowing Skala to access it.
+
+### Skala Static IP Addresses
+
+- `52.38.24.56`
+- `35.160.30.43`
+- `35.167.66.86`
+- `52.11.250.38`
+- `54.203.55.239`
+- `18.246.77.0/27` // Needed by April 1, 2023
+- `2602:fb33::/45` // Needed by April 1, 2023
+
+**Note**: If you are using AWS S3, do not use IP allowlisting. Instead, use S3 IAM Access. Requests to S3 will not necessarily originate from our static IPs.

@@ -1,6 +1,6 @@
 # Multi-Stage Overview
 
-Multi-stage is our most advanced and flexible task type. It is designed to handle complex full-scene labeling that spans multiple annotation types and modalities. Multi-stage tasks serve as a replacement for Scale’s legacy dependent tasks system, which required using multiple tasks to fully label a scene.
+Multi-stage is our most advanced and flexible task type. It is designed to handle complex full-scene labeling that spans multiple annotation types and modalities. Multi-stage tasks serve as a replacement for Skala’s legacy dependent tasks system, which required using multiple tasks to fully label a scene.
 
 On a multi-stage task, labeling is split into multiple stages. Stages are organized in a pipeline such that they are dependent on one another and can run sequentially or in parallel. As a task passes through a stage, Skala adds labels corresponding to taxonomy classes enabled for that stage. Once all stages are completed, the task is finalized and delivered.
 

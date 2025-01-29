@@ -68,7 +68,7 @@ To toggle between viewing **Live Mode** and **Test Mode** in the Skala **web app
 
 ## Callback Authentication
 
-If you'd like to **verify** that callbacks from Skala are legitimate, use the **`scale-callback-auth`** HTTP header.
+If you'd like to **verify** that callbacks from Skala are legitimate, use the **`skala-callback-auth`** HTTP header.
 
 - Each callback from Skala will include this **authentication header**.
 - The value of this header will match your **Live Callback Auth Key**, available in your **dashboard**.
@@ -156,7 +156,7 @@ curl -X GET "https://api.skala.xyz/v1/projects" \
 | **Authentication Method** | HTTP Basic Authentication (API Key as username, no password) |
 | **Test vs Live Mode**     | Test mode returns mock responses, live mode incurs charges   |
 | **API Key Location**      | Available in Skala Dashboard → Profile → API Keys            |
-| **Callback Verification** | Uses `scale-callback-auth` header                            |
+| **Callback Verification** | Uses `skala-callback-auth` header                            |
 | **Base64 Encoding**       | Required for sending `Authorization: Basic` header           |
 
 For additional support, visit our **[API Documentation](https://api.skala.xyz/docs)** or contact **support@skala.xyz**.

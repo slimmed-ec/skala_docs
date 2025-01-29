@@ -1,0 +1,39 @@
+# API Compatibility Policy
+
+The Skala REST API is versioned via a prefix in the URL. Currently, we only support v1 of the API via https://api.skala.xyz/v1/. Within an API version, we strive to only make backward-compatible changes to the API. This means that a client that integrates with v1 of our REST API will continue to work when querying v1 in the future.
+
+## Backward-compatible changes
+
+Backward-compatible changes can be made within an API version, and include:
+
+- Adding new optional request parameters or HTTP request headers.
+
+- Making a required request parameter optional.
+
+- Rejecting a request which contains invalid parameter values, as a result of improved parsing and validation. Improperly formed requests that were previously accepted may be later rejected.
+
+- Adding new fields to a response or callback object.
+
+- Adding new values for existing parameters that have enumerated sets of values.
+
+- Undocumented functionality may be removed or changed at any time.
+
+## Backward-incompatible changes
+
+Backward-incompatible changes will only happen in a new version of the API, and include:
+
+- Changing the behavior of existing request parameters.
+
+- Changing the names of elements used in API POST or PUT requests.
+
+- Adding a new required request parameter.
+
+- Changing the meaning of parameters that have enumerated values, or the meanings of those parameter values.
+
+- Changing the meaning or type of existing response or callback fields.
+
+- Changing the meaning of an API route.
+
+## Deprecation policy
+
+At times, we will deprecate and remove parts of our API that can no longer be supported. In this case, we will make a best effort to identify and notify affected users, and will continue to support the deprecated API during the migration process.

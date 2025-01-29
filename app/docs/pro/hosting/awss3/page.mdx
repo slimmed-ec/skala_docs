@@ -1,0 +1,79 @@
+# AWS S3
+
+### S3 IAM Access
+
+If you use **AWS S3** to store data and submit tasks with attachments as `s3:` protocol URIs instead of `http:` or `https:`, Skala will use the **S3 API** to fetch your data. For example, instead of sending `https://s3-us-west-2.amazonaws.com/bucket/key`, you would send `s3://bucket/key`.
+
+Skala can fetch your data using **IAM Delegated Access** (preferred, more secure) or **Cross-account Access**.
+
+### IAM Delegated Access
+
+To access **S3 data** in your AWS account, Skala can assume a role in your account with permission to access data in your **S3 buckets**. This role must be named **SkalaAI-Integration**.
+
+#### Steps to Set Up IAM Delegated Access:
+
+1. As a team admin or manager, go to `dashboard.skala.xyz/settings/integrations`.
+2. In another window, create a new **role** in the **AWS IAM Console**.
+3. Select **Another AWS account** for the Role Type.
+4. Enter `307185671274` (Skala's Account ID) as the Account ID.
+5. Check **Require external ID**, and enter the **external ID** displayed in the AWS section of the **Integrations Settings** page.
+6. Do not check **Require MFA**.
+7. For permissions, either attach a policy that grants appropriate access or create a policy. A sample role policy is shown below.
+8. Name the role **SkalaAI-Integration**.
+9. Return to the **Skala Dashboard** and enter your **AWS account ID**.
+
+#
+
+![Deskripsi gambar](/img/5934b04-aws_integration.webp)
+
+#
+
+#### Sample Role Policy for IAM Delegated Access
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "scales3access",
+      "Action": ["s3:GetObject", "s3:ListBucket"],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::YOUR_BUCKET_NAME/*",
+        "arn:aws:s3:::YOUR_BUCKET_NAME"
+      ]
+    }
+  ]
+}
+```
+
+> **Note:** If you enable AWS integration for your account, Skala will not attempt to fetch attachments from Skala’s account (`307185671274`) directly.
+
+### Cross-account Access
+
+If **IAM Delegated Access** is not configured, Skala will fetch attachments directly from your **S3 bucket** using AWS **account ID** `307185671274` (canonical ID `ae2259599e139df6cedb60b6300bcafa1c652aff129aa3d887477b6d4abf2e47`). You can grant access on a per-object basis using **ACLs** or **bucket policies**.
+
+For most customers, we recommend setting a **Bucket Policy** to share the bucket's contents with Skala's account.
+
+#### Sample Bucket Policy for Cross-account Access
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "scale-s3-access",
+      "Action": ["s3:GetObject"],
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": ["arn:aws:iam::307185671274:root"]
+      },
+      "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+    }
+  ]
+}
+```
+
+> **Note:** If using **Access Control Lists (ACLs)**, each object must have its ACL updated individually to grant read access to Skala’s account, as **Bucket ACLs** cannot grant read permissions to the objects inside.
+
+> **Security Warning:** This authentication method suffers from the **confused deputy problem**—a third party that can guess your **S3 URLs** may submit tasks with your data.
